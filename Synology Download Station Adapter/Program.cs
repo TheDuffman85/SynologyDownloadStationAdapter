@@ -41,7 +41,11 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 if (createdNew)
                 {                    
                     Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);                                                                                                       
+                    Application.SetCompatibleTextRenderingDefault(false);
+
+                    // Start the listener
+                    Adapter.Start();
+                                                       
                     Application.Run(Adapter.FrmSettings);
                 }
                 // An instance is allready running

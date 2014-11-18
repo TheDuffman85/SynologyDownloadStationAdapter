@@ -1,0 +1,170 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+using TheDuffman85.ContainerDecrypter;
+
+namespace TheDuffman85.SynologyDownloadStationAdapter
+{
+    public partial class frmSettings : Form
+    {
+        #region Variables
+
+        private bool _close = false;
+        private frmAddLinks _frmAddLinks;
+        private bool _openingContainer = false;
+        
+        #endregion
+
+        #region Properties
+
+        public NotifyIcon NotifyIcon
+        {
+            get
+            {
+                return this.notifyIcon;
+            }
+        }
+
+        private frmAddLinks FrmAddLinks
+        {
+            get
+            {
+                if (_frmAddLinks == null ||
+                    _frmAddLinks.IsDisposed)
+                {
+                    _frmAddLinks = new frmAddLinks();
+                }
+
+                return _frmAddLinks;
+            }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public frmSettings()
+        {
+            InitializeComponent();
+        }
+
+        #endregion
+
+        #region Eventhandler
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.Show();
+            this.Activate();
+        }        
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _close = true;
+            this.Close();            
+        }
+
+        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing && !_close)
+            {
+                e.Cancel = true;
+                this.Visible = false;
+            }
+        }
+        
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();  
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Address = txtAddress.Text;
+            Properties.Settings.Default.Username = txtUsername.Text;
+            Properties.Settings.Default.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(txtPassword.Text));
+            
+            Properties.Settings.Default.Save();
+
+            if (cbAutostart.Checked != Adapter.IsAutoStart())
+            {
+                Adapter.ToggleAutoStart();
+            }
+
+            this.Close();  
+        }
+
+        private void frmSettings_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {                
+                txtAddress.Text = Properties.Settings.Default.Address;
+                txtUsername.Text = Properties.Settings.Default.Username;
+                txtPassword.Text = Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password));
+
+                cbAutostart.Checked = Adapter.IsAutoStart();
+            }
+        }
+
+        private void openDiskstationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://" + Properties.Settings.Default.Address);
+        }
+        
+        private void btnFileAssociation_Click(object sender, EventArgs e)
+        {
+            Adapter.AssociateFileTypes();
+        }    
+
+        private void addLinkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmAddLinks.Show();
+            FrmAddLinks.Activate();
+        }
+        
+        private void addContainerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!this._openingContainer)
+            {
+                this._openingContainer = true;
+
+                try
+                {
+                    using (OpenFileDialog openFile = new OpenFileDialog())
+                    {
+                        openFile.Title = "Select a Container File";
+                        openFile.Filter = "DLC files (*.dlc)|*.dlc|CCF files (*.ccf)|*.ccf|RSDF files (*.rsdf)|*.rsdf";
+                        openFile.Multiselect = false;
+                        
+                        if (openFile.ShowDialog() == DialogResult.OK)
+                        {
+                            DcryptItDecrypter decrypter = new DcryptItDecrypter(openFile.FileName);
+                            decrypter.Decrypt();
+
+                            Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+                }
+                finally
+                {
+                    this._openingContainer = false;
+                }
+            }                       
+        }
+
+        #endregion      
+    }
+}

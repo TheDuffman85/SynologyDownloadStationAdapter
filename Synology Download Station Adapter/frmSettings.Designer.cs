@@ -1,0 +1,256 @@
+﻿namespace TheDuffman85.SynologyDownloadStationAdapter
+{
+    partial class frmSettings
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addContainerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openDiskstationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.txtAddress = new System.Windows.Forms.TextBox();
+            this.txtUsername = new System.Windows.Forms.TextBox();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbAutostart = new System.Windows.Forms.CheckBox();
+            this.btnFileAssociation = new System.Windows.Forms.Button();
+            this.contextMenuStrip.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon.BalloonTipText = "Test Text";
+            this.notifyIcon.BalloonTipTitle = "Test Titel";
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Synology Download Station Adapter";
+            this.notifyIcon.Visible = true;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addLinkToolStripMenuItem,
+            this.addContainerToolStripMenuItem,
+            this.openDiskstationToolStripMenuItem,
+            this.settingsToolStripMenuItem,
+            this.quitToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(165, 114);
+            // 
+            // addLinkToolStripMenuItem
+            // 
+            this.addLinkToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.textfield_add;
+            this.addLinkToolStripMenuItem.Name = "addLinkToolStripMenuItem";
+            this.addLinkToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.addLinkToolStripMenuItem.Text = "Add Links";
+            this.addLinkToolStripMenuItem.Click += new System.EventHandler(this.addLinkToolStripMenuItem_Click);
+            // 
+            // addContainerToolStripMenuItem
+            // 
+            this.addContainerToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.package_add;
+            this.addContainerToolStripMenuItem.Name = "addContainerToolStripMenuItem";
+            this.addContainerToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.addContainerToolStripMenuItem.Text = "Add Container";
+            this.addContainerToolStripMenuItem.Click += new System.EventHandler(this.addContainerToolStripMenuItem_Click);
+            // 
+            // openDiskstationToolStripMenuItem
+            // 
+            this.openDiskstationToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.world;
+            this.openDiskstationToolStripMenuItem.Name = "openDiskstationToolStripMenuItem";
+            this.openDiskstationToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.openDiskstationToolStripMenuItem.Text = "Open Diskstation";
+            this.openDiskstationToolStripMenuItem.Click += new System.EventHandler(this.openDiskstationToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.cog;
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // quitToolStripMenuItem
+            // 
+            this.quitToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.cross;
+            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.quitToolStripMenuItem.Text = "Quit";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(139, 153);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 1;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(220, 153);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // txtAddress
+            // 
+            this.txtAddress.Location = new System.Drawing.Point(90, 12);
+            this.txtAddress.Name = "txtAddress";
+            this.txtAddress.Size = new System.Drawing.Size(205, 20);
+            this.txtAddress.TabIndex = 3;
+            // 
+            // txtUsername
+            // 
+            this.txtUsername.Location = new System.Drawing.Point(90, 38);
+            this.txtUsername.Name = "txtUsername";
+            this.txtUsername.Size = new System.Drawing.Size(205, 20);
+            this.txtUsername.TabIndex = 4;
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(90, 64);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
+            this.txtPassword.Size = new System.Drawing.Size(205, 20);
+            this.txtPassword.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(48, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Address:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 41);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "User:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(13, 67);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(56, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Password:";
+            // 
+            // cbAutostart
+            // 
+            this.cbAutostart.AutoSize = true;
+            this.cbAutostart.Location = new System.Drawing.Point(90, 119);
+            this.cbAutostart.Name = "cbAutostart";
+            this.cbAutostart.Size = new System.Drawing.Size(117, 17);
+            this.cbAutostart.TabIndex = 10;
+            this.cbAutostart.Text = "Start with Windows";
+            this.cbAutostart.UseVisualStyleBackColor = true;
+            // 
+            // btnFileAssociation
+            // 
+            this.btnFileAssociation.Location = new System.Drawing.Point(90, 90);
+            this.btnFileAssociation.Name = "btnFileAssociation";
+            this.btnFileAssociation.Size = new System.Drawing.Size(205, 23);
+            this.btnFileAssociation.TabIndex = 11;
+            this.btnFileAssociation.Text = "Associate with (.dlc, .ccd, .rsdf)";
+            this.btnFileAssociation.UseVisualStyleBackColor = true;
+            this.btnFileAssociation.Click += new System.EventHandler(this.btnFileAssociation_Click);
+            // 
+            // frmSettings
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(308, 187);
+            this.Controls.Add(this.btnFileAssociation);
+            this.Controls.Add(this.cbAutostart);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtPassword);
+            this.Controls.Add(this.txtUsername);
+            this.Controls.Add(this.txtAddress);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnSave);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmSettings";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Settings";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
+            this.VisibleChanged += new System.EventHandler(this.frmSettings_VisibleChanged);
+            this.contextMenuStrip.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TextBox txtAddress;
+        private System.Windows.Forms.TextBox txtUsername;
+        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem openDiskstationToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbAutostart;
+        private System.Windows.Forms.Button btnFileAssociation;
+        private System.Windows.Forms.ToolStripMenuItem addLinkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addContainerToolStripMenuItem;
+    }
+}

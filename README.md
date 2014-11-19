@@ -5,7 +5,7 @@ This application allows you to add links by container (dlc, ccf, rsdf) and Click
 Requirements
 ==============================
 * .NET Framework 4.5
-* Access to internet (Containers will be decrypted using http://dcrypt.it/)
+* Access to internet (containers will be decrypted using http://dcrypt.it/)
 
 Features
 ==============================
@@ -13,6 +13,7 @@ Features
 * Add links using containers (dlc, ccf, rsdf)
 * Add plain text links
 * Associate with supported file types
+* Open Diskstation in Webbrowser
 
 Screenshots
 ==============================

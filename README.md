@@ -14,6 +14,7 @@ Features
 * Add plain text links
 * Associate with supported file types
 * Open Diskstation in Webbrowser
+* BallonTips
 
 Screenshots
 ==============================

@@ -1,4 +1,4 @@
-SynologyDownloadStationAdapter
+Synology Download Station Adapter
 ==============================
 This application allows you to add links by container (dlc, ccf, rsdf) and Click'N'Load to your Synology Download Station
 

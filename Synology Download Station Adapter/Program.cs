@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
-
+using Awesomium.Core;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
@@ -42,6 +42,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 {                    
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
+                    Application.ApplicationExit += OnApplicationExit;
 
                     // Start the listener
                     Adapter.Start();
@@ -68,6 +69,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     }
                 }
             }            
+        }
+
+        private static void OnApplicationExit(object sender, EventArgs e)
+        {
+            if (WebCore.IsInitialized)
+            {
+                WebCore.Shutdown();
+            }
         }
            
         #endregion

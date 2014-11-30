@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TheDuffman85.SynologyDownloadStationAdapter</RootNamespace>
     <AssemblyName>Synology Download Station Adapter</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -31,7 +31,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -42,7 +42,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -73,11 +73,9 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214" />
+    <Reference Include="Awesomium.Windows.Forms, Version=1.7.5.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ContainerDecrypter\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="StdUtils">
       <HintPath>.\StdUtils.dll</HintPath>
     </Reference>
@@ -105,6 +103,12 @@
     <Compile Include="frmAddLinks.Designer.cs">
       <DependentUpon>frmAddLinks.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmDownloadStation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDownloadStation.Designer.cs">
+      <DependentUpon>frmDownloadStation.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +120,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmAddLinks.resx">
       <DependentUpon>frmAddLinks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDownloadStation.resx">
+      <DependentUpon>frmDownloadStation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
@@ -155,6 +162,8 @@
     <Content Include="Icons\cog.png" />
     <Content Include="Icons\cross.png" />
     <Content Include="Icons\ds.ico" />
+    <None Include="Icons\indicator.gif" />
+    <None Include="Icons\Error.png" />
     <Content Include="Icons\package_add.png" />
     <Content Include="Icons\textfield_add.ico" />
     <Content Include="Icons\textfield_add.png" />

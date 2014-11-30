@@ -47,6 +47,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbAutostart = new System.Windows.Forms.CheckBox();
             this.btnFileAssociation = new System.Windows.Forms.Button();
+            this.cbApplicationEnabled = new System.Windows.Forms.CheckBox();
+            this.txtApplicationUrl = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,17 +62,19 @@
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Synology Download Station Adapter";
             this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openDiskstationToolStripMenuItem,
             this.addLinkToolStripMenuItem,
             this.addContainerToolStripMenuItem,
-            this.openDiskstationToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(165, 114);
+            this.contextMenuStrip.Size = new System.Drawing.Size(165, 136);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // addLinkToolStripMenuItem
             // 
@@ -113,7 +118,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(139, 153);
+            this.btnSave.Location = new System.Drawing.Point(167, 181);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 1;
@@ -123,7 +128,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(220, 153);
+            this.btnCancel.Location = new System.Drawing.Point(248, 181);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -133,24 +138,24 @@
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(90, 12);
+            this.txtAddress.Location = new System.Drawing.Point(101, 12);
             this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(205, 20);
+            this.txtAddress.Size = new System.Drawing.Size(222, 20);
             this.txtAddress.TabIndex = 3;
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(90, 38);
+            this.txtUsername.Location = new System.Drawing.Point(101, 38);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(205, 20);
+            this.txtUsername.Size = new System.Drawing.Size(222, 20);
             this.txtUsername.TabIndex = 4;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(90, 64);
+            this.txtPassword.Location = new System.Drawing.Point(101, 64);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(205, 20);
+            this.txtPassword.Size = new System.Drawing.Size(222, 20);
             this.txtPassword.TabIndex = 5;
             // 
             // label1
@@ -183,7 +188,7 @@
             // cbAutostart
             // 
             this.cbAutostart.AutoSize = true;
-            this.cbAutostart.Location = new System.Drawing.Point(90, 119);
+            this.cbAutostart.Location = new System.Drawing.Point(101, 145);
             this.cbAutostart.Name = "cbAutostart";
             this.cbAutostart.Size = new System.Drawing.Size(117, 17);
             this.cbAutostart.TabIndex = 10;
@@ -192,19 +197,49 @@
             // 
             // btnFileAssociation
             // 
-            this.btnFileAssociation.Location = new System.Drawing.Point(90, 90);
+            this.btnFileAssociation.Location = new System.Drawing.Point(101, 116);
             this.btnFileAssociation.Name = "btnFileAssociation";
-            this.btnFileAssociation.Size = new System.Drawing.Size(205, 23);
+            this.btnFileAssociation.Size = new System.Drawing.Size(222, 23);
             this.btnFileAssociation.TabIndex = 11;
             this.btnFileAssociation.Text = "Associate with (.dlc, .ccd, .rsdf)";
             this.btnFileAssociation.UseVisualStyleBackColor = true;
             this.btnFileAssociation.Click += new System.EventHandler(this.btnFileAssociation_Click);
             // 
+            // cbApplicationEnabled
+            // 
+            this.cbApplicationEnabled.AutoSize = true;
+            this.cbApplicationEnabled.Location = new System.Drawing.Point(101, 90);
+            this.cbApplicationEnabled.Name = "cbApplicationEnabled";
+            this.cbApplicationEnabled.Size = new System.Drawing.Size(15, 14);
+            this.cbApplicationEnabled.TabIndex = 12;
+            this.cbApplicationEnabled.UseVisualStyleBackColor = true;
+            this.cbApplicationEnabled.CheckedChanged += new System.EventHandler(this.cbApplicationUrl_CheckedChanged);
+            // 
+            // txtApplicationUrl
+            // 
+            this.txtApplicationUrl.Enabled = false;
+            this.txtApplicationUrl.Location = new System.Drawing.Point(118, 90);
+            this.txtApplicationUrl.Name = "txtApplicationUrl";
+            this.txtApplicationUrl.Size = new System.Drawing.Size(205, 20);
+            this.txtApplicationUrl.TabIndex = 13;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(13, 93);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Application Url:";
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(308, 187);
+            this.ClientSize = new System.Drawing.Size(335, 216);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtApplicationUrl);
+            this.Controls.Add(this.cbApplicationEnabled);
             this.Controls.Add(this.btnFileAssociation);
             this.Controls.Add(this.cbAutostart);
             this.Controls.Add(this.label3);
@@ -252,5 +287,8 @@
         private System.Windows.Forms.Button btnFileAssociation;
         private System.Windows.Forms.ToolStripMenuItem addLinkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addContainerToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbApplicationEnabled;
+        private System.Windows.Forms.TextBox txtApplicationUrl;
+        private System.Windows.Forms.Label label4;
     }
 }

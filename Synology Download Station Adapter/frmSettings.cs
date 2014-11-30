@@ -17,9 +17,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
     {
         #region Variables
 
-        private bool _close = false;
-        private frmAddLinks _frmAddLinks;
-        private bool _openingContainer = false;
+        private bool _close = false;        
+        private bool _openingContainer = false;        
         
         #endregion
 
@@ -31,21 +30,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             {
                 return this.notifyIcon;
             }
-        }
-
-        private frmAddLinks FrmAddLinks
-        {
-            get
-            {
-                if (_frmAddLinks == null ||
-                    _frmAddLinks.IsDisposed)
-                {
-                    _frmAddLinks = new frmAddLinks();
-                }
-
-                return _frmAddLinks;
-            }
-        }
+        }        
 
         #endregion
 
@@ -92,13 +77,19 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             Properties.Settings.Default.Address = txtAddress.Text;
             Properties.Settings.Default.Username = txtUsername.Text;
             Properties.Settings.Default.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(txtPassword.Text));
-            
+            Properties.Settings.Default.ApplicationEnabled = cbApplicationEnabled.Checked;
+            Properties.Settings.Default.ApplicationUrl = txtApplicationUrl.Text;
+
             Properties.Settings.Default.Save();
 
             if (cbAutostart.Checked != Adapter.IsAutoStart())
             {
                 Adapter.ToggleAutoStart();
             }
+
+            // Dispose of Download Station form,
+            // because the url could have been changed
+            Adapter.FrmDownloadStation.Dispose();
 
             this.Close();  
         }
@@ -110,6 +101,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 txtAddress.Text = Properties.Settings.Default.Address;
                 txtUsername.Text = Properties.Settings.Default.Username;
                 txtPassword.Text = Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password));
+                cbApplicationEnabled.Checked = Properties.Settings.Default.ApplicationEnabled;
+                txtApplicationUrl.Text = Properties.Settings.Default.ApplicationUrl;
 
                 cbAutostart.Checked = Adapter.IsAutoStart();
             }
@@ -117,7 +110,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private void openDiskstationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("http://" + Properties.Settings.Default.Address);
+            Adapter.OpenDownloadStation();
         }
         
         private void btnFileAssociation_Click(object sender, EventArgs e)
@@ -127,8 +120,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private void addLinkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmAddLinks.Show();
-            FrmAddLinks.Activate();
+            Adapter.FrmAddLinks.Show();
+            Adapter.FrmAddLinks.Activate();
         }
         
         private void addContainerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -165,6 +158,41 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }                       
         }
 
-        #endregion      
+        private void cbApplicationUrl_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbApplicationEnabled.Checked)
+            {
+                txtApplicationUrl.Enabled = false;
+                txtApplicationUrl.Text = string.Empty;
+            }
+            else
+            {
+                txtApplicationUrl.Enabled = true;                
+                if (string.IsNullOrEmpty(txtApplicationUrl.Text))
+                {
+                    txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/";
+                }
+            }
+        }
+
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            if (Properties.Settings.Default.ApplicationEnabled)
+            {
+                openDiskstationToolStripMenuItem.Text = "Open Download Station";
+            }
+            else
+            {
+                openDiskstationToolStripMenuItem.Text = "Open Diskstation";
+            }
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Adapter.OpenDownloadStation();
+        }
+
+        #endregion  
+
     }
 }

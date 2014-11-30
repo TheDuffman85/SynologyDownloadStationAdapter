@@ -79,5 +79,29 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
                 this["CheckClipboard"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ApplicationEnabled {
+            get {
+                return ((bool)(this["ApplicationEnabled"]));
+            }
+            set {
+                this["ApplicationEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ApplicationUrl {
+            get {
+                return ((string)(this["ApplicationUrl"]));
+            }
+            set {
+                this["ApplicationUrl"] = value;
+            }
+        }
     }
 }

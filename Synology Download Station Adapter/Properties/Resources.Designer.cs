@@ -93,6 +93,16 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap indicator {
+            get {
+                object obj = ResourceManager.GetObject("indicator", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap package_add {
             get {
                 object obj = ResourceManager.GetObject("package_add", resourceCulture);

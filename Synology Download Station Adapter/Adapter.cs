@@ -34,6 +34,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private static HttpListener _httpListener;
         private static frmSettings _frmSettings;
+        private static frmAddLinks _frmAddLinks;
+        private static frmDownloadStation _frmDownloadStation;
         
         #endregion   
 
@@ -49,6 +51,40 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 }
 
                 return _frmSettings;
+            }
+        }
+
+        public static frmAddLinks FrmAddLinks
+        {
+            get
+            {
+                if (_frmAddLinks == null ||
+                    _frmAddLinks.IsDisposed)
+                {
+                    _frmAddLinks = new frmAddLinks();
+                }
+
+                return _frmAddLinks;
+            }
+        }
+
+        public static frmDownloadStation FrmDownloadStation
+        {
+            get
+            {
+                if (_frmDownloadStation != null &&
+                    _frmDownloadStation.Crashed)
+                {
+                    _frmDownloadStation.Dispose();
+                }
+
+                if (_frmDownloadStation == null ||
+                    _frmDownloadStation.IsDisposed)
+                {
+                    _frmDownloadStation = new frmDownloadStation();
+                }
+
+                return _frmDownloadStation;
             }
         }
 
@@ -433,6 +469,19 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:9666/OpenFile?" + System.Web.HttpUtility.UrlEncode(path));
             request.Method = "GET";
             request.GetResponse();            
+        }
+
+        public static void OpenDownloadStation()
+        {
+            if (Properties.Settings.Default.ApplicationEnabled)
+            {
+                Adapter.FrmDownloadStation.Show();
+                Adapter.FrmDownloadStation.Activate();
+            }
+            else
+            {
+                Process.Start("http://" + Properties.Settings.Default.Address);
+            }
         }
 
         #endregion

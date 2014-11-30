@@ -30,7 +30,7 @@ Note
 ==============================
 I'm not even sure whether the container formats ccf and rsdf are working or not. I wasn't able to find any example files. Maybe I'll remove the support for these containers completely in a future release.
 
-Dependency
+Dependencies
 ==============================
 * Json.NET (http://james.newtonking.com/json)
 * Jurassic (https://jurassic.codeplex.com/)

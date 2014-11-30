@@ -25,13 +25,16 @@ Features
 
 Screenshots
 ==============================
-![image 1](https://cloud.githubusercontent.com/assets/9296618/5097034/7a7d266a-6f77-11e4-87d4-49be4c6de3e2.png)
+![image 1](https://cloud.githubusercontent.com/assets/9296618/5239627/c3af9f5a-78e8-11e4-9a21-609c4f998953.png)
 
-![image 2](https://cloud.githubusercontent.com/assets/9296618/5097037/7a838c94-6f77-11e4-9122-f77b4afd07a7.png)
+![image 2](https://cloud.githubusercontent.com/assets/9296618/5239628/c3afc9d0-78e8-11e4-875a-e423d15fd7ec.png)
 
-![image 3](https://cloud.githubusercontent.com/assets/9296618/5097035/7a7f1ff6-6f77-11e4-833e-bbb59131c148.png)
+![image 3](https://cloud.githubusercontent.com/assets/9296618/5239629/c3b21fa0-78e8-11e4-8f23-c09ff3f14ac8.png)
 
-![image 4](https://cloud.githubusercontent.com/assets/9296618/5097036/7a823038-6f77-11e4-9879-be05a9784b78.png)
+![image 4](https://cloud.githubusercontent.com/assets/9296618/5239626/c3af1198-78e8-11e4-924f-8b2d84e01771.png)
+
+![image 5](https://cloud.githubusercontent.com/assets/9296618/5239630/c3b2fb78-78e8-11e4-91a3-098bba3e1498.png)
+
 
 Note
 ==============================

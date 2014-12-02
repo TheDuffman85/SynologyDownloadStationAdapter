@@ -259,8 +259,8 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
+            this.Load += new System.EventHandler(this.frmSettings_Load);
             this.VisibleChanged += new System.EventHandler(this.frmSettings_VisibleChanged);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);

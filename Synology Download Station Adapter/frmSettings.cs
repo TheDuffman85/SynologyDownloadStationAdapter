@@ -39,6 +39,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         public frmSettings()
         {
             InitializeComponent();
+            this.Opacity = 0;
         }
 
         #endregion
@@ -63,7 +64,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             if (e.CloseReason == CloseReason.UserClosing && !_close)
             {
                 e.Cancel = true;
-                this.Visible = false;
+                this.Hide();
             }
         }
         
@@ -193,6 +194,15 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         }
 
         #endregion  
+
+        private void frmSettings_Load(object sender, EventArgs e)
+        {
+            this.BeginInvoke(new MethodInvoker(delegate
+            {
+                this.Hide();
+                this.Opacity = 1;
+            }));            
+        }
 
     }
 }

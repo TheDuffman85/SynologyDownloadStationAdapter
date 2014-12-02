@@ -32,9 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openDiskstationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addContainerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openDiskstationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSave = new System.Windows.Forms.Button();
@@ -73,8 +73,16 @@
             this.settingsToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(165, 136);
+            this.contextMenuStrip.Size = new System.Drawing.Size(165, 114);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            // 
+            // openDiskstationToolStripMenuItem
+            // 
+            this.openDiskstationToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.world;
+            this.openDiskstationToolStripMenuItem.Name = "openDiskstationToolStripMenuItem";
+            this.openDiskstationToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.openDiskstationToolStripMenuItem.Text = "Open Diskstation";
+            this.openDiskstationToolStripMenuItem.Click += new System.EventHandler(this.openDiskstationToolStripMenuItem_Click);
             // 
             // addLinkToolStripMenuItem
             // 
@@ -91,14 +99,6 @@
             this.addContainerToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.addContainerToolStripMenuItem.Text = "Add Container";
             this.addContainerToolStripMenuItem.Click += new System.EventHandler(this.addContainerToolStripMenuItem_Click);
-            // 
-            // openDiskstationToolStripMenuItem
-            // 
-            this.openDiskstationToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.world;
-            this.openDiskstationToolStripMenuItem.Name = "openDiskstationToolStripMenuItem";
-            this.openDiskstationToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.openDiskstationToolStripMenuItem.Text = "Open Diskstation";
-            this.openDiskstationToolStripMenuItem.Click += new System.EventHandler(this.openDiskstationToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -121,7 +121,7 @@
             this.btnSave.Location = new System.Drawing.Point(167, 181);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 1;
+            this.btnSave.TabIndex = 80;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -131,7 +131,7 @@
             this.btnCancel.Location = new System.Drawing.Point(248, 181);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 2;
+            this.btnCancel.TabIndex = 90;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -141,14 +141,14 @@
             this.txtAddress.Location = new System.Drawing.Point(101, 12);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(222, 20);
-            this.txtAddress.TabIndex = 3;
+            this.txtAddress.TabIndex = 10;
             // 
             // txtUsername
             // 
             this.txtUsername.Location = new System.Drawing.Point(101, 38);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(222, 20);
-            this.txtUsername.TabIndex = 4;
+            this.txtUsername.TabIndex = 20;
             // 
             // txtPassword
             // 
@@ -156,7 +156,7 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(222, 20);
-            this.txtPassword.TabIndex = 5;
+            this.txtPassword.TabIndex = 30;
             // 
             // label1
             // 
@@ -191,7 +191,7 @@
             this.cbAutostart.Location = new System.Drawing.Point(101, 145);
             this.cbAutostart.Name = "cbAutostart";
             this.cbAutostart.Size = new System.Drawing.Size(117, 17);
-            this.cbAutostart.TabIndex = 10;
+            this.cbAutostart.TabIndex = 70;
             this.cbAutostart.Text = "Start with Windows";
             this.cbAutostart.UseVisualStyleBackColor = true;
             // 
@@ -200,7 +200,7 @@
             this.btnFileAssociation.Location = new System.Drawing.Point(101, 116);
             this.btnFileAssociation.Name = "btnFileAssociation";
             this.btnFileAssociation.Size = new System.Drawing.Size(222, 23);
-            this.btnFileAssociation.TabIndex = 11;
+            this.btnFileAssociation.TabIndex = 60;
             this.btnFileAssociation.Text = "Associate with (.dlc, .ccd, .rsdf)";
             this.btnFileAssociation.UseVisualStyleBackColor = true;
             this.btnFileAssociation.Click += new System.EventHandler(this.btnFileAssociation_Click);
@@ -211,7 +211,7 @@
             this.cbApplicationEnabled.Location = new System.Drawing.Point(101, 90);
             this.cbApplicationEnabled.Name = "cbApplicationEnabled";
             this.cbApplicationEnabled.Size = new System.Drawing.Size(15, 14);
-            this.cbApplicationEnabled.TabIndex = 12;
+            this.cbApplicationEnabled.TabIndex = 40;
             this.cbApplicationEnabled.UseVisualStyleBackColor = true;
             this.cbApplicationEnabled.CheckedChanged += new System.EventHandler(this.cbApplicationUrl_CheckedChanged);
             // 
@@ -221,7 +221,7 @@
             this.txtApplicationUrl.Location = new System.Drawing.Point(118, 90);
             this.txtApplicationUrl.Name = "txtApplicationUrl";
             this.txtApplicationUrl.Size = new System.Drawing.Size(205, 20);
-            this.txtApplicationUrl.TabIndex = 13;
+            this.txtApplicationUrl.TabIndex = 50;
             // 
             // label4
             // 

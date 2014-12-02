@@ -46,7 +46,7 @@
             this.txtLinks.Multiline = true;
             this.txtLinks.Name = "txtLinks";
             this.txtLinks.Size = new System.Drawing.Size(310, 128);
-            this.txtLinks.TabIndex = 0;
+            this.txtLinks.TabIndex = 10;
             this.txtLinks.TextChanged += new System.EventHandler(this.txtLinks_TextChanged);
             // 
             // btnCancel
@@ -55,7 +55,7 @@
             this.btnCancel.Location = new System.Drawing.Point(247, 146);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 4;
+            this.btnCancel.TabIndex = 40;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -67,7 +67,7 @@
             this.btnAdd.Location = new System.Drawing.Point(166, 146);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 3;
+            this.btnAdd.TabIndex = 30;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -79,7 +79,7 @@
             this.cbClipboard.Location = new System.Drawing.Point(12, 150);
             this.cbClipboard.Name = "cbClipboard";
             this.cbClipboard.Size = new System.Drawing.Size(122, 17);
-            this.cbClipboard.TabIndex = 5;
+            this.cbClipboard.TabIndex = 20;
             this.cbClipboard.Text = "      Check Clipboard";
             this.cbClipboard.UseVisualStyleBackColor = true;
             this.cbClipboard.CheckedChanged += new System.EventHandler(this.cbClipboard_CheckedChanged);

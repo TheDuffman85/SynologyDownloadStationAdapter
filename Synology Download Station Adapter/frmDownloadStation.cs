@@ -70,12 +70,18 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             if (e.Url.Segments.Length == 3 &&
                 e.Url.Segments[2] == "index.cgi")
             {
-                string js = "$('login_username').setValue('" + Properties.Settings.Default.Username + "');" +
-                            "$('login_passwd').setValue('" + Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)) + "');" +
-                            "$('ext-gen32').click()";
-                            
-                webControl.ExecuteJavascript(js);
-                pbLoadingIndicator.Visible = false;
+                if (e.ReadyState != DocumentReadyState.Loaded)
+                {
+                    string js = "$('login_username').setValue('" + Properties.Settings.Default.Username + "');" +
+                                "$('login_passwd').setValue('" + Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)) + "');" +
+                                "$('ext-gen32').click()";
+
+                    webControl.ExecuteJavascript(js);
+                }
+                else
+                {
+                    pbLoadingIndicator.Visible = false;
+                }
             }
         }
 
@@ -91,7 +97,12 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             this._crashed = true;
         }
 
+        private void Awesomium_Windows_Forms_WebControl_ShowJavascriptDialog(object sender, JavascriptDialogEventArgs e)
+        {
+            e.Cancel = true;
+            e.Handled = true;
+        }
+
         #endregion
-                
-    }  
+     }  
 }

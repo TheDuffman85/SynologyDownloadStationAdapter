@@ -109,6 +109,12 @@
     <Compile Include="frmDownloadStation.Designer.cs">
       <DependentUpon>frmDownloadStation.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSelectHoster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSelectHoster.Designer.cs">
+      <DependentUpon>frmSelectHoster.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmDownloadStation.resx">
       <DependentUpon>frmDownloadStation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSelectHoster.resx">
+      <DependentUpon>frmSelectHoster.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>

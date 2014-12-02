@@ -42,6 +42,7 @@
             this.webControl.Size = new System.Drawing.Size(884, 661);
             this.webControl.Source = new System.Uri("about:blank", System.UriKind.Absolute);
             this.webControl.TabIndex = 0;
+            this.webControl.ShowJavascriptDialog += new Awesomium.Core.JavascriptDialogEventHandler(this.Awesomium_Windows_Forms_WebControl_ShowJavascriptDialog);
             this.webControl.LoadingFrameFailed += new Awesomium.Core.LoadingFrameFailedEventHandler(this.Awesomium_Windows_Forms_WebControl_LoadingFrameFailed);
             this.webControl.CertificateError += new Awesomium.Core.CertificateErrorEventHandler(this.Awesomium_Windows_Forms_WebControl_CertificateError);
             this.webControl.Crashed += new Awesomium.Core.CrashedEventHandler(this.Awesomium_Windows_Forms_WebControl_Crashed);

@@ -401,14 +401,22 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 {
                     links.RemoveAll(str => String.IsNullOrEmpty(str.Trim()));
 
-                    List<Uri> validLinks = new List<Uri>();
-                    List<string> corruptedLinks = new List<string>();
+                    Dictionary<string, List<string>> validHostLinks = new Dictionary<string, List<string>>();
+                    List<string> corruptedLinks = new List<string>();   
+                    Uri currentLink = null;
 
                     foreach (string link in links)
                     {
                         try
                         {
-                            validLinks.Add(new Uri(link));
+                            currentLink = new Uri(link);
+                           
+                            if (!validHostLinks.ContainsKey(currentLink.Host))
+                            {
+                                validHostLinks.Add(currentLink.Host, new List<string>());
+                            }
+                            
+                            validHostLinks[currentLink.Host].Add(link);
                         }
                         catch
                         {
@@ -416,25 +424,35 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         }                        
                     }
 
-                    foreach (Uri link in validLinks)
+                    if (validHostLinks.Keys.Count > 1)
                     {
-                        // Add link to Download Station
-                        SynologyRestDAL.TResult<object> result = ds.CreateTask(link.ToString());
+                        frmSelectHoster.SelectHoster(validHostLinks);
+                    }                                        
 
-                        if (!result.Success)
+                    foreach (var validHostLink in validHostLinks)
+                    {
+                        Adapter.ShowBalloonTip("Adding " + validHostLink.Value.Count + " links(s) (" + validHostLink.Key + ")", ToolTipIcon.Info);                        
+
+                        foreach (string link in validHostLink.Value)
                         {
-                            if (result.Error.Code == 406)
+                            // Add link to Download Station
+                            SynologyRestDAL.TResult<object> result = ds.CreateTask(link);
+                                                        
+                            if (!result.Success)
                             {
-                                throw new Exception("Couldn't add download link. You have to choose a download folder for your Download Station.");
+                                if (result.Error.Code == 406)
+                                {
+                                    throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
+                                }
+                                else
+                                {
+                                    throw new Exception("While adding a link '" + link + " error code " + result.Error.Code + " occurred");
+                                }
                             }
-                            else
-                            {
-                                throw new Exception("While adding a download link '" + link.ToString() + " error code " + result.Error.Code + " occurred");
-                            }
-                        }
+                        }                        
                     }
-
-                    string msg = validLinks.Count + " link(s) added";
+                                        
+                    string msg = validHostLinks.Count + " link(s) added";
 
                     if (corruptedLinks.Count > 0)
                     {

@@ -20,16 +20,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         #region Constructor
 
-        private frmSelectHoster(Dictionary<string, List<string>> validHostLinks)
+        public frmSelectHoster()
         {
             InitializeComponent();
-
-            this._validHostLinks = validHostLinks;
-
-            foreach (string host in _validHostLinks.Keys)
-            {
-                clbHoster.Items.Add(host, true);
-            }
         }
 
         #endregion
@@ -79,15 +72,26 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         #region Methods
 
-        public static void SelectHoster(Dictionary<string, List<string>> validHostLinks)
+        public void SelectHoster(Dictionary<string, List<string>> validHostLinks)
         {
-            using (frmSelectHoster frm = new frmSelectHoster(validHostLinks))
+            this._validHostLinks = validHostLinks;
+
+            this.clbHoster.Items.Clear();
+
+            foreach (string host in _validHostLinks.Keys)
             {
-                frm.ShowDialog(); 
+                this.clbHoster.Items.Add(host, true);
             }
+
+            this.ShowDialog();
         }
 
-        #endregion
- 
+        private void frmSelectHoster_Shown(object sender, EventArgs e)
+        {
+            // For some reason the very first time the windows was shown in background. This workaround will fix that.
+            this.TopMost = true;            
+        }
+
+        #endregion 
     }
 }

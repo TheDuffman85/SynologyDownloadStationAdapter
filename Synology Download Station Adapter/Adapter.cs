@@ -36,6 +36,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         private static frmSettings _frmSettings;
         private static frmAddLinks _frmAddLinks;
         private static frmDownloadStation _frmDownloadStation;
+        private static frmSelectHoster _frmSelectHoster;
         
         #endregion   
 
@@ -88,6 +89,22 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }
         }
 
+        public static frmSelectHoster FrmSelectHoster
+        {
+            get
+            {
+                if (_frmSelectHoster == null ||
+                    _frmSelectHoster.IsDisposed)
+                {
+                    _frmSelectHoster = new frmSelectHoster();
+                    _frmSelectHoster.Visible = true;
+                    _frmSelectHoster.Visible = false;
+                }
+
+                return _frmSelectHoster;
+            }
+        }
+
         #endregion 
 
         #region Static Methods
@@ -137,6 +154,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             HttpListenerContext context = _httpListener.EndGetContext(result);
             _httpListener.BeginGetContext(new AsyncCallback(WebRequestCallback), _httpListener);
+            DecrypterBase decrypter = null;
 
             // build response data
             HttpListenerResponse response = context.Response;
@@ -166,8 +184,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                     if (!string.IsNullOrEmpty(requestBody))
                     {
-                        ClickNLoadDecrypter decrypter = new ClickNLoadDecrypter(requestBody);
-                        Adapter.AddLinksToDownloadStation(decrypter);
+                        decrypter = new ClickNLoadDecrypter(requestBody);
                     }
 
                     responseString = "success\r\n";
@@ -183,8 +200,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    ContainerDecrypter.DcryptItDecrypter decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
-                    Adapter.AddLinksToDownloadStation(decrypter);
+                    decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
                 }
 
                 responseString = "success\r\n";
@@ -199,6 +215,11 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             System.IO.Stream output = response.OutputStream;
             output.Write(buffer, 0, buffer.Length);
             output.Close();
+
+            if (decrypter != null)
+            {
+                Adapter.AddLinksToDownloadStation(decrypter);
+            }
         }
 
         /// <summary>
@@ -404,6 +425,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     Dictionary<string, List<string>> validHostLinks = new Dictionary<string, List<string>>();
                     List<string> corruptedLinks = new List<string>();   
                     Uri currentLink = null;
+                    int validHostLinkCount = 0;
 
                     foreach (string link in links)
                     {
@@ -424,14 +446,16 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         }                        
                     }
 
-                    if (validHostLinks.Keys.Count > 1)
-                    {
-                        frmSelectHoster.SelectHoster(validHostLinks);
-                    }                                        
+                    //if (validHostLinks.Keys.Count > 1)
+                    //{
+                        Adapter.FrmSelectHoster.SelectHoster(validHostLinks);
+                    //}                                        
 
                     foreach (var validHostLink in validHostLinks)
                     {
-                        Adapter.ShowBalloonTip("Adding " + validHostLink.Value.Count + " links(s) (" + validHostLink.Key + ")", ToolTipIcon.Info);                        
+                        Adapter.ShowBalloonTip("Adding " + validHostLink.Value.Count + " links(s) (" + validHostLink.Key + ")", ToolTipIcon.Info);
+
+                        validHostLinkCount += validHostLink.Value.Count;
 
                         foreach (string link in validHostLink.Value)
                         {
@@ -451,8 +475,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                             }
                         }                        
                     }
-                                        
-                    string msg = validHostLinks.Count + " link(s) added";
+
+                    string msg = validHostLinkCount + " link(s) added";
 
                     if (corruptedLinks.Count > 0)
                     {

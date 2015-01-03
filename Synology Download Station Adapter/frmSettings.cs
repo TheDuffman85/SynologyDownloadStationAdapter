@@ -171,7 +171,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 txtApplicationUrl.Enabled = true;                
                 if (string.IsNullOrEmpty(txtApplicationUrl.Text))
                 {
-                    txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/";
+                    txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/index.cgi";
                 }
             }
         }

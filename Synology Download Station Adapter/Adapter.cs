@@ -27,6 +27,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #region Constants
 
         private const string REG_KEY_NAME = "SynologyDownloadStationAdapter";
+        private static readonly string[] FILE_TYPES = new string[] { ".dlc", ".ccf", ".rsdf" };
 
         #endregion
 
@@ -197,10 +198,17 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             else if (context.Request.RawUrl.StartsWith("/OpenFile?"))
             {
                 string filePath = System.Web.HttpUtility.UrlDecode(context.Request.RawUrl.Substring(10));
-
+                                                
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
+                    if (FILE_TYPES.Contains(Path.GetExtension(filePath).ToLower()))
+                    {
+                        decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
+                    }
+                    else
+                    {
+                        ShowBalloonTip("Only file types dlc, ccf and rsdf are supported", ToolTipIcon.Warning);
+                    }
                 }
 
                 responseString = "success\r\n";
@@ -326,7 +334,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             if (IsRunAsAdmin())
             {
-                foreach (string fileType in new string[] { ".dlc", ".ccf", ".rsdf" })
+                foreach (string fileType in FILE_TYPES)
                 {
                     SetAssociation(fileType, "SynologyDownloadStationAdapter", Application.ExecutablePath, "Synolog Download Station Adapter");
                 }
@@ -446,10 +454,10 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         }                        
                     }
 
-                    //if (validHostLinks.Keys.Count > 1)
-                    //{
+                    if (validHostLinks.Keys.Count > 1)
+                    {
                         Adapter.FrmSelectHoster.SelectHoster(validHostLinks);
-                    //}                                        
+                    }                                        
 
                     foreach (var validHostLink in validHostLinks)
                     {

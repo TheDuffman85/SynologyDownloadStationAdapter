@@ -22,6 +22,7 @@ Features
 * Associate with supported file types
 * Open Download Station in a Window
 * BallonTips
+* Choose hoster from which you want add links
 
 Screenshots
 ==============================
@@ -32,6 +33,8 @@ Screenshots
 ![image 3](https://cloud.githubusercontent.com/assets/9296618/5239629/c3b21fa0-78e8-11e4-8f23-c09ff3f14ac8.png)
 
 ![image 4](https://cloud.githubusercontent.com/assets/9296618/5239626/c3af1198-78e8-11e4-924f-8b2d84e01771.png)
+
+![image 6](https://cloud.githubusercontent.com/assets/9296618/5271394/3eeea0a8-7a74-11e4-8c72-e4b26fc2f64f.png)
 
 ![image 5](https://cloud.githubusercontent.com/assets/9296618/5239630/c3b2fb78-78e8-11e4-91a3-098bba3e1498.png)
 

@@ -14,6 +14,7 @@ namespace TheDuffman85.ContainerDecrypter
     public class DcryptItDecrypter : DecrypterBase
     {
         private const string DCRYPT_IT_UPLOAD_URL = "http://dcrypt.it/decrypt/upload";
+        private static readonly string[] FILE_TYPES = new string[] { ".dlc", ".ccf", ".rsdf" };
 
         /// <summary>
         /// DcryptItDecrypter constructor
@@ -22,10 +23,14 @@ namespace TheDuffman85.ContainerDecrypter
         public DcryptItDecrypter(string path)
             : base(path)
         {
+            if (!FILE_TYPES.Contains(Path.GetExtension(path).ToLower()))
+            {
+                throw new ArgumentException("Only file types dlc, ccf and rsdf are supported");
+            }
         }
 
         protected override void Decrypt(string content, out string[] links, out string password)
-        {            
+        {                        
             string boundary = DateTime.UtcNow.Ticks.ToString().PadLeft(40, '-');
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(DCRYPT_IT_UPLOAD_URL);

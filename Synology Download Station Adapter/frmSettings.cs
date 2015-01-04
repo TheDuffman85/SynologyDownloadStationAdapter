@@ -141,10 +141,22 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         
                         if (openFile.ShowDialog() == DialogResult.OK)
                         {
-                            DcryptItDecrypter decrypter = new DcryptItDecrypter(openFile.FileName);
-                            decrypter.Decrypt();
+                            DcryptItDecrypter decrypter = null;
 
-                            Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
+                            try
+                            {
+                                decrypter = new DcryptItDecrypter(openFile.FileName);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Warning);
+                            }
+
+                            if (decrypter != null)
+                            {
+                                decrypter.Decrypt();
+                                Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
+                            }                           
                         }
                     }
                 }

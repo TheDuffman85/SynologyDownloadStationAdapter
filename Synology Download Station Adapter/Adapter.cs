@@ -200,14 +200,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 string filePath = System.Web.HttpUtility.UrlDecode(context.Request.RawUrl.Substring(10));
                                                 
                 if (!string.IsNullOrEmpty(filePath))
-                {
-                    if (FILE_TYPES.Contains(Path.GetExtension(filePath).ToLower()))
+                {                    
+                    try
                     {
                         decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
                     }
-                    else
+                    catch (ArgumentException ex)
                     {
-                        ShowBalloonTip("Only file types dlc, ccf and rsdf are supported", ToolTipIcon.Warning);
+                        Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Warning);
                     }
                 }
 

@@ -37,9 +37,11 @@
             // 
             // webControl
             // 
-            this.webControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webControl.Location = new System.Drawing.Point(0, 0);
-            this.webControl.Size = new System.Drawing.Size(884, 661);
+            this.webControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.webControl.Location = new System.Drawing.Point(0, -35);
+            this.webControl.Size = new System.Drawing.Size(884, 696);
             this.webControl.Source = new System.Uri("about:blank", System.UriKind.Absolute);
             this.webControl.TabIndex = 0;
             this.webControl.ShowJavascriptDialog += new Awesomium.Core.JavascriptDialogEventHandler(this.Awesomium_Windows_Forms_WebControl_ShowJavascriptDialog);
@@ -72,6 +74,7 @@
             this.Text = "Download Station";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmDownloadStation_FormClosing);
             this.Load += new System.EventHandler(this.frmDownloadStation_Load);
+            this.ResizeEnd += new System.EventHandler(this.frmDownloadStation_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.pbLoadingIndicator)).EndInit();
             this.ResumeLayout(false);
 

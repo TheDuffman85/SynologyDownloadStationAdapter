@@ -27,7 +27,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #region Constants
 
         private const string REG_KEY_NAME = "SynologyDownloadStationAdapter";
-        private static readonly string[] FILE_TYPES = new string[] { ".dlc", ".ccf", ".rsdf" };
+        public static readonly string[] FILE_TYPES_ALL = new string[] { ".dlc", ".ccf", ".rsdf", ".torrent", ".nzb" };
+        public static readonly string[] FILE_TYPES_NO_DECRYPT = new string[] { ".torrent", ".nzb" };
 
         #endregion
 
@@ -38,6 +39,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         private static frmAddLinks _frmAddLinks;
         private static frmDownloadStation _frmDownloadStation;
         private static frmSelectHoster _frmSelectHoster;
+        private static Dictionary<string, string> _fileDownloads;
         
         #endregion   
 
@@ -106,6 +108,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }
         }
 
+        public static Dictionary<string, string> FileDownloads
+        {
+            get
+            {
+                return _fileDownloads;
+            }
+        }
+
         #endregion 
 
         #region Static Methods
@@ -118,6 +128,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             // Click'N'Load Listener
             _httpListener = new HttpListener();
             _httpListener.Prefixes.Add("http://+:9666/");
+
+            _fileDownloads = new Dictionary<string, string>();
 
             try
             {
@@ -156,77 +168,130 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             HttpListenerContext context = _httpListener.EndGetContext(result);
             _httpListener.BeginGetContext(new AsyncCallback(WebRequestCallback), _httpListener);
             DecrypterBase decrypter = null;
+            byte[] responseBuffer = new byte[0];
 
             // build response data
             HttpListenerResponse response = context.Response;
             string responseString = "";
             response.StatusCode = 200;
-            response.Headers.Add("Content-Type: text/html");
-            // crossdomain.xml
-            if (context.Request.RawUrl == "/crossdomain.xml")
-            {
-                responseString = "<?xml version=\"1.0\"?>"
-                + "<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">"
-                + "<cross-domain-policy>"
-                + "<allow-access-from domain=\"*\" />"
-                + "</cross-domain-policy>";
-            }
-            else if (context.Request.RawUrl == "/jdcheck.js")
-            {
-                responseString = "jdownloader=true; var version='18507';";
-            }
-            else if (context.Request.RawUrl.StartsWith("/flash"))
-            {
-                if (context.Request.RawUrl.Contains("addcrypted2"))
-                {
-                    System.IO.Stream body = context.Request.InputStream;
-                    System.IO.StreamReader reader = new System.IO.StreamReader(body, context.Request.ContentEncoding);
-                    String requestBody = System.Web.HttpUtility.UrlDecode(reader.ReadToEnd());
 
-                    if (!string.IsNullOrEmpty(requestBody))
+            if (context.Request.HttpMethod.ToUpper() == "HEAD")
+            {
+                response.Close();
+            }
+            else
+            {
+                response.Headers.Add("Content-Type: text/html");
+                // crossdomain.xml
+                if (context.Request.RawUrl == "/crossdomain.xml")
+                {
+                    responseString = "<?xml version=\"1.0\"?>"
+                    + "<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">"
+                    + "<cross-domain-policy>"
+                    + "<allow-access-from domain=\"*\" />"
+                    + "</cross-domain-policy>";
+                }
+                else if (context.Request.RawUrl == "/jdcheck.js")
+                {
+                    responseString = "jdownloader=true; var version='18507';";
+                }
+                else if (context.Request.RawUrl.StartsWith("/flash"))
+                {
+                    if (context.Request.RawUrl.Contains("addcrypted2"))
                     {
-                        decrypter = new ClickNLoadDecrypter(requestBody);
+                        System.IO.Stream body = context.Request.InputStream;
+                        System.IO.StreamReader reader = new System.IO.StreamReader(body, context.Request.ContentEncoding);
+                        String requestBody = System.Web.HttpUtility.UrlDecode(reader.ReadToEnd());
+
+                        if (!string.IsNullOrEmpty(requestBody))
+                        {
+                            decrypter = new ClickNLoadDecrypter(requestBody);
+                        }
+
+                        responseString = "success\r\n";
+                    }
+                    else
+                    {
+                        responseString = "JDownloader";
+                    }
+                }
+                else if (context.Request.RawUrl.StartsWith("/OpenFile?"))
+                {
+                    string filePath = System.Web.HttpUtility.UrlDecode(context.Request.RawUrl.Substring(10));
+
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        if (Adapter.FILE_TYPES_NO_DECRYPT.Contains(Path.GetExtension(filePath).ToLower()))
+                        {
+                            Adapter.AddFileToDownloadStation(filePath);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Warning);
+                            }
+                        }
                     }
 
                     responseString = "success\r\n";
                 }
+                else if (context.Request.RawUrl.StartsWith("/DownloadFile?"))
+                {
+                    string id = System.Web.HttpUtility.UrlDecode(context.Request.RawUrl.Substring(14));
+
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        try
+                        {
+                            if (_fileDownloads.ContainsKey(id))
+                            {
+                                string path = _fileDownloads[id];
+                                _fileDownloads.Remove(id);
+
+                                if (!string.IsNullOrEmpty(path))
+                                {
+                                    responseBuffer = File.ReadAllBytes(path);
+
+                                    response.Headers.Remove("Content-Type");
+
+                                    response.Headers.Add("Content-Type: application/octet-stream"); //text/plain
+                                    response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(path));
+
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+                        }
+                    }
+                }
                 else
                 {
-                    responseString = "JDownloader";
-                }
-            }
-            else if (context.Request.RawUrl.StartsWith("/OpenFile?"))
-            {
-                string filePath = System.Web.HttpUtility.UrlDecode(context.Request.RawUrl.Substring(10));
-                                                
-                if (!string.IsNullOrEmpty(filePath))
-                {                    
-                    try
-                    {
-                        decrypter = new ContainerDecrypter.DcryptItDecrypter(filePath);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Warning);
-                    }
+                    response.StatusCode = 400;
                 }
 
-                responseString = "success\r\n";
-            }
-            else
-            {
-                response.StatusCode = 400;
-            }
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-            response.ContentLength64 = buffer.Length;
-            // output response
-            System.IO.Stream output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
-            output.Close();
+                if (!string.IsNullOrEmpty(responseString))
+                {
+                    responseBuffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                }
 
-            if (decrypter != null)
-            {
-                Adapter.AddLinksToDownloadStation(decrypter);
+                response.ContentLength64 = responseBuffer.Length;
+
+                // output response
+                System.IO.Stream output = response.OutputStream;
+                output.Write(responseBuffer, 0, responseBuffer.Length);
+                output.Close();
+
+                if (decrypter != null)
+                {
+                    Adapter.AddLinksToDownloadStation(decrypter);
+                }
             }
         }
 
@@ -334,7 +399,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             if (IsRunAsAdmin())
             {
-                foreach (string fileType in FILE_TYPES)
+                foreach (string fileType in FILE_TYPES_ALL)
                 {
                     SetAssociation(fileType, "SynologyDownloadStationAdapter", Application.ExecutablePath, "Synolog Download Station Adapter");
                 }
@@ -464,24 +529,21 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         Adapter.ShowBalloonTip("Adding " + validHostLink.Value.Count + " links(s) (" + validHostLink.Key + ")", ToolTipIcon.Info);
 
                         validHostLinkCount += validHostLink.Value.Count;
+                                                
+                        // Add links to Download Station
+                        SynologyRestDAL.TResult<object> result = ds.CreateTask(string.Join(",", validHostLink.Value.ToArray()));
 
-                        foreach (string link in validHostLink.Value)
+                        if (!result.Success)
                         {
-                            // Add link to Download Station
-                            SynologyRestDAL.TResult<object> result = ds.CreateTask(link);
-                                                        
-                            if (!result.Success)
+                            if (result.Error.Code == 406)
                             {
-                                if (result.Error.Code == 406)
-                                {
-                                    throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
-                                }
-                                else
-                                {
-                                    throw new Exception("While adding a link '" + link + " error code " + result.Error.Code + " occurred");
-                                }
+                                throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
                             }
-                        }                        
+                            else
+                            {
+                                throw new Exception("While adding links the error code " + result.Error.Code + " occurred");
+                            }
+                        }                       
                     }
 
                     string msg = validHostLinkCount + " link(s) added";
@@ -513,12 +575,98 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }
         }
 
+        /// <summary>
+        /// Adds a file to Download Station
+        /// </summary>
+        /// <param name="path">Path of file</param>
+        /// <returns>Success?</returns>
+        public static bool AddFileToDownloadStation(string path)
+        {
+            DownloadStation ds = null;
+            string name = string.Empty;
+            string extention = string.Empty;
+            FileStream file = null;
+
+            try
+            {
+                ds = new DownloadStation(new Uri("http://" + Properties.Settings.Default.Address), Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
+
+                if (File.Exists(path))
+                {
+                    name = Path.GetFileName(path);
+
+                    // Login to Download Station
+                    if (ds.Login())
+                    {
+                        Adapter.ShowBalloonTip("Adding " + name , ToolTipIcon.Info);
+
+                        // Register file for download
+                        string fileDownload = RegisterFileDownload(path);
+
+                        // Add file to Download Station
+                        SynologyRestDAL.TResult<object> result = ds.CreateTask(fileDownload);
+
+                        if (!result.Success)
+                        {
+                            if (result.Error.Code == 406)
+                            {
+                                throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
+                            }
+                            else
+                            {
+                                throw new Exception("While adding " + name + " error code " + result.Error.Code + " occurred");
+                            }
+                        }
+
+                        Adapter.ShowBalloonTip("Added " + name , ToolTipIcon.Info);
+
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception("Couldn't login to Download Station");
+                    }
+                }
+                else
+                {
+                    Adapter.ShowBalloonTip("Couldn't find file '" + path + "'", ToolTipIcon.Error);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+                return false;
+            }
+            finally
+            {
+                if (ds != null)
+                {
+                    ds.Logout();
+                }
+
+                if (file != null)
+                {
+                    file.Close();
+                }
+            }
+        }
+
         public static void OpenFileWithRunningInstance(string path)
         {            
             // Open file with running instance
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:9666/OpenFile?" + System.Web.HttpUtility.UrlEncode(path));
             request.Method = "GET";
             request.GetResponse();            
+        }
+
+        public static string RegisterFileDownload(string path)
+        {
+            Guid id = Guid.NewGuid();
+
+            _fileDownloads.Add(id.ToString(), path);
+
+            return "http://" + System.Net.Dns.GetHostName() + ":9666/DownloadFile?" + id.ToString();
         }
 
         public static void OpenDownloadStation()

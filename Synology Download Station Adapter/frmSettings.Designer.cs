@@ -201,7 +201,7 @@
             this.btnFileAssociation.Name = "btnFileAssociation";
             this.btnFileAssociation.Size = new System.Drawing.Size(222, 23);
             this.btnFileAssociation.TabIndex = 60;
-            this.btnFileAssociation.Text = "Associate with (.dlc, .ccd, .rsdf)";
+            this.btnFileAssociation.Text = "Associate with ({0})";
             this.btnFileAssociation.UseVisualStyleBackColor = true;
             this.btnFileAssociation.Click += new System.EventHandler(this.btnFileAssociation_Click);
             // 

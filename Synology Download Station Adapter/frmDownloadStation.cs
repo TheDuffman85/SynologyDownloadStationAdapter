@@ -38,6 +38,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         public frmDownloadStation()
         {
             InitializeComponent();
+
+            this.Width = Settings.Default.SizeX;
+            this.Height = Settings.Default.SizeY;
         }
 
         #endregion
@@ -48,6 +51,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             webControl.DocumentReady += webControl_DocumentReady;
             webControl.Source = new Uri(Properties.Settings.Default.ApplicationUrl);
+        }
+
+        private void frmDownloadStation_ResizeEnd(object sender, EventArgs e)
+        {
+            Settings.Default.SizeX = this.Width;
+            Settings.Default.SizeY = this.Height;
+
+            Settings.Default.Save();
         }
         
         private void Awesomium_Windows_Forms_WebControl_CertificateError(object sender, Awesomium.Core.CertificateErrorEventArgs e)
@@ -104,5 +115,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         }
 
         #endregion
+                
      }  
 }

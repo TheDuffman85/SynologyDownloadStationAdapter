@@ -103,5 +103,29 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
                 this["ApplicationUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("900")]
+        public int SizeX {
+            get {
+                return ((int)(this["SizeX"]));
+            }
+            set {
+                this["SizeX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
+        public int SizeY {
+            get {
+                return ((int)(this["SizeY"]));
+            }
+            set {
+                this["SizeY"] = value;
+            }
+        }
     }
 }

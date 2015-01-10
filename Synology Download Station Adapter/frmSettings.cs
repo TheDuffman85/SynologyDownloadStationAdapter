@@ -40,6 +40,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             InitializeComponent();
             this.Opacity = 0;
+
+            this.btnFileAssociation.Text = string.Format(this.btnFileAssociation.Text, string.Join(",", Adapter.FILE_TYPES_ALL) );
         }
 
         #endregion
@@ -136,27 +138,34 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     using (OpenFileDialog openFile = new OpenFileDialog())
                     {
                         openFile.Title = "Select a Container File";
-                        openFile.Filter = "DLC files (*.dlc)|*.dlc|CCF files (*.ccf)|*.ccf|RSDF files (*.rsdf)|*.rsdf";
+                        openFile.Filter = "Container Files (" + string.Join(" ,*", Adapter.FILE_TYPES_ALL).Trim(" ,".ToCharArray()) + ")|" + string.Join(";*", Adapter.FILE_TYPES_ALL).Trim(";".ToCharArray()) + "|All files (*.*)|*.*";
                         openFile.Multiselect = false;
                         
                         if (openFile.ShowDialog() == DialogResult.OK)
                         {
-                            DcryptItDecrypter decrypter = null;
-
-                            try
+                            if (Adapter.FILE_TYPES_NO_DECRYPT.Contains(Path.GetExtension(openFile.FileName).ToLower()))
                             {
-                                decrypter = new DcryptItDecrypter(openFile.FileName);
+                                Adapter.AddFileToDownloadStation(openFile.FileName);
                             }
-                            catch (ArgumentException ex)
+                            else
                             {
-                                Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Warning);
-                            }
+                                DcryptItDecrypter decrypter = null;
 
-                            if (decrypter != null)
-                            {
-                                decrypter.Decrypt();
-                                Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
-                            }                           
+                                try
+                                {
+                                    decrypter = new DcryptItDecrypter(openFile.FileName);
+                                }
+                                catch (ArgumentException ex)
+                                {
+                                    Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Warning);
+                                }
+
+                                if (decrypter != null)
+                                {
+                                    decrypter.Decrypt();
+                                    Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
+                                }   
+                            }                                                    
                         }
                     }
                 }

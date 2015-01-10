@@ -25,7 +25,7 @@ namespace TheDuffman85.ContainerDecrypter
         {
             if (!FILE_TYPES.Contains(Path.GetExtension(path).ToLower()))
             {
-                throw new ArgumentException("Only file types dlc, ccf and rsdf are supported");
+                throw new ArgumentException("File type " + Path.GetExtension(path) + " isn't supported");
             }
         }
 

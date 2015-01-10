@@ -244,32 +244,31 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 {
                     string id = System.Web.HttpUtility.UrlDecode(context.Request.RawUrl.Substring(14));
 
-                    if (!string.IsNullOrEmpty(id))
+                    try
                     {
-                        try
+                        if (_fileDownloads.ContainsKey(id))
                         {
-                            if (_fileDownloads.ContainsKey(id))
-                            {
-                                string path = _fileDownloads[id];
-                                _fileDownloads.Remove(id);
+                            string path = _fileDownloads[id];
+                            _fileDownloads.Remove(id);
 
-                                if (!string.IsNullOrEmpty(path))
-                                {
-                                    responseBuffer = File.ReadAllBytes(path);
+                            responseBuffer = File.ReadAllBytes(path);
 
-                                    response.Headers.Remove("Content-Type");
+                            response.Headers.Remove("Content-Type");
 
-                                    response.Headers.Add("Content-Type: application/octet-stream"); //text/plain
-                                    response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(path));
-
-                                }
-                            }
+                            response.Headers.Add("Content-Type: application/octet-stream"); //text/plain
+                            response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(path));
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+                            response.StatusCode = 404;
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        response.StatusCode = 500;
+
+                        Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+                    }                    
                 }
                 else
                 {

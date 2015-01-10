@@ -255,7 +255,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                             response.Headers.Remove("Content-Type");
 
-                            response.Headers.Add("Content-Type: application/octet-stream"); //text/plain
+                            response.Headers.Add("Content-Type: application/octet-stream");
                             response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(path));
                         }
                         else

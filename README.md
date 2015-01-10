@@ -1,6 +1,6 @@
 Synology Download Station Adapter
 ==============================
-This application allows you to add links by container (dlc, ccf, rsdf) and Click'N'Load to your Synology Download Station
+This application allows you to add links by container and Click'N'Load to your Synology Download Station
 
 Requirements
 ==============================
@@ -17,7 +17,7 @@ Dependencies
 Features
 ==============================
 * Add links with Click'N'Load
-* Add links using containers (dlc, ccf, rsdf)
+* Add links using containers (dlc, ccf, rsdf, torrent, nzb) 
 * Add plain text links
 * Associate with supported file types
 * Open Download Station in a Window

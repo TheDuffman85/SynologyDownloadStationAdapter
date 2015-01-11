@@ -23,6 +23,7 @@ Features
 * Open Download Station in a Window
 * BallonTips
 * Choose hoster from which you want add links
+* Monitor clipboard for download links
 
 Screenshots
 ==============================

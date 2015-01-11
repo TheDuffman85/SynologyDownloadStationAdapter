@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -39,6 +40,16 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             InitializeComponent();
 
+            // Provide current culture to Awesomium
+            Awesomium.Windows.Forms.WebSessionProvider webSessionProvider = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
+            Awesomium.Core.WebPreferences webPreferences = new Awesomium.Core.WebPreferences(true);
+            webPreferences.AcceptLanguage = CultureInfo.CurrentCulture.Name + "," + CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            webPreferences.JavascriptViewChangeSource = false;
+            webPreferences.JavascriptViewEvents = false;
+            webPreferences.JavascriptViewExecute = false;
+            webSessionProvider.Preferences = webPreferences;
+            webSessionProvider.Views.Add(this.webControl);
+
             this.Width = Settings.Default.SizeX;
             this.Height = Settings.Default.SizeY;
         }
@@ -48,7 +59,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #region Eventhandlers
 
         private void frmDownloadStation_Load(object sender, EventArgs e)
-        {
+        {                        
             webControl.DocumentReady += webControl_DocumentReady;
             webControl.Source = new Uri(Properties.Settings.Default.ApplicationUrl);
         }

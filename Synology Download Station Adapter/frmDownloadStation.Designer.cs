@@ -83,7 +83,7 @@
         #endregion
 
         private Awesomium.Windows.Forms.WebControl webControl;
-        private System.Windows.Forms.PictureBox pbLoadingIndicator;
+        private System.Windows.Forms.PictureBox pbLoadingIndicator;       
         
     }
 }

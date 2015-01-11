@@ -569,7 +569,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             {
                 if (ds != null)
                 {
-                    ds.Logout();
+                    try
+                    {
+                        ds.Logout();
+                    }
+                    catch
+                    {
+                        // Ignore error on logout
+                    }                    
                 }
             }
         }

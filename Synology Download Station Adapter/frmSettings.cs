@@ -15,6 +15,33 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 {
     public partial class frmSettings : Form
     {
+        #region Imports
+
+        /// <summary>
+        /// Places the given window in the system-maintained clipboard format listener list.
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AddClipboardFormatListener(IntPtr hwnd);
+
+        /// <summary>
+        /// Removes the given window from the system-maintained clipboard format listener list.
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
+
+        #endregion
+
+        #region Constants
+
+        /// <summary>
+        /// Sent when the contents of the clipboard have changed.
+        /// </summary>
+        private const int WM_CLIPBOARDUPDATE = 0x031D;
+
+        #endregion
+
         #region Variables
 
         private bool _close = false;        
@@ -40,6 +67,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             InitializeComponent();
             this.Opacity = 0;
+
+            AddClipboardFormatListener(this.Handle); 
 
             this.btnFileAssociation.Text = string.Format(this.btnFileAssociation.Text, string.Join(",", Adapter.FILE_TYPES_ALL) );
         }
@@ -67,6 +96,10 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             {
                 e.Cancel = true;
                 this.Hide();
+            }
+            else
+            {
+                RemoveClipboardFormatListener(this.Handle);
             }
         }
         
@@ -214,16 +247,38 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             Adapter.OpenDownloadStation();
         }
 
-        #endregion  
-
         private void frmSettings_Load(object sender, EventArgs e)
         {
             this.BeginInvoke(new MethodInvoker(delegate
             {
                 this.Hide();
                 this.Opacity = 1;
-            }));            
+            }));
         }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == WM_CLIPBOARDUPDATE)
+            {
+                IDataObject iData = Clipboard.GetDataObject();
+
+                if (iData.GetDataPresent(DataFormats.Text))
+                {
+                    string text = (string)iData.GetData(DataFormats.Text);
+
+                    if (Properties.Settings.Default.CheckClipboard &&
+                        Uri.IsWellFormedUriString(text, UriKind.Absolute))
+                    {
+                        Adapter.FrmAddLinks.Show();
+                        Adapter.FrmAddLinks.Activate();
+                    }
+                }
+            }
+        }
+
+        #endregion  
 
     }
 }

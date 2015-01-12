@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmAddLinks : Form
+    public partial class frmAddLinks : SingletonForm<frmAddLinks>
     {
         #region Variable
 

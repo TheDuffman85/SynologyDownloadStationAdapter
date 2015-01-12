@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmSelectHoster : Form
+    public partial class frmSelectHoster : SingletonForm<frmSelectHoster>
     {
         #region Variables
 

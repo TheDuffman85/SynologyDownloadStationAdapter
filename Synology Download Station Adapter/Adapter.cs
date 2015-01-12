@@ -17,7 +17,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 {
     public class Adapter
     {
-        #region Import
+        #region Imports
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
@@ -34,80 +34,13 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         #region Variables
 
-        private static HttpListener _httpListener;
-        private static frmSettings _frmSettings;
-        private static frmAddLinks _frmAddLinks;
-        private static frmDownloadStation _frmDownloadStation;
-        private static frmSelectHoster _frmSelectHoster;
+        private static HttpListener _httpListener;       
         private static Dictionary<string, string> _fileDownloads;
         
         #endregion   
 
         #region Properties
-
-        public static frmSettings FrmSettings
-        {
-            get
-            {
-                if (_frmSettings == null)
-                {
-                    _frmSettings = new frmSettings();
-                }
-
-                return _frmSettings;
-            }
-        }
-
-        public static frmAddLinks FrmAddLinks
-        {
-            get
-            {
-                if (_frmAddLinks == null ||
-                    _frmAddLinks.IsDisposed)
-                {
-                    _frmAddLinks = new frmAddLinks();
-                }
-
-                return _frmAddLinks;
-            }
-        }
-
-        public static frmDownloadStation FrmDownloadStation
-        {
-            get
-            {
-                if (_frmDownloadStation != null &&
-                    _frmDownloadStation.Crashed)
-                {
-                    _frmDownloadStation.Dispose();
-                }
-
-                if (_frmDownloadStation == null ||
-                    _frmDownloadStation.IsDisposed)
-                {
-                    _frmDownloadStation = new frmDownloadStation();
-                }
-
-                return _frmDownloadStation;
-            }
-        }
-
-        public static frmSelectHoster FrmSelectHoster
-        {
-            get
-            {
-                if (_frmSelectHoster == null ||
-                    _frmSelectHoster.IsDisposed)
-                {
-                    _frmSelectHoster = new frmSelectHoster();
-                    _frmSelectHoster.Visible = true;
-                    _frmSelectHoster.Visible = false;
-                }
-
-                return _frmSelectHoster;
-            }
-        }
-
+   
         public static Dictionary<string, string> FileDownloads
         {
             get
@@ -301,7 +234,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         /// <param name="icon">Icon of the ballon</param>
         public static void ShowBalloonTip(string msg, ToolTipIcon icon)
         {
-            FrmSettings.NotifyIcon.ShowBalloonTip(3000, "Synology Download Station Adapter", msg, icon);
+            frmSettings.Instance.NotifyIcon.ShowBalloonTip(3000, "Synology Download Station Adapter", msg, icon);
         }
 
         /// <summary>
@@ -520,7 +453,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                     if (validHostLinks.Keys.Count > 1)
                     {
-                        Adapter.FrmSelectHoster.SelectHoster(validHostLinks);
+                        frmSelectHoster.Instance.SelectHoster(validHostLinks);
                     }                                        
 
                     foreach (var validHostLink in validHostLinks)
@@ -679,8 +612,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             if (Properties.Settings.Default.ApplicationEnabled)
             {
-                Adapter.FrmDownloadStation.Show();
-                Adapter.FrmDownloadStation.Activate();
+                frmDownloadStation.ShowInstance();
             }
             else
             {

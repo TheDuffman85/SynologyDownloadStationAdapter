@@ -14,26 +14,8 @@ using TheDuffman85.SynologyDownloadStationAdapter.Properties;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmDownloadStation : Form
-    {
-        #region Variables
-
-        bool _crashed = false;
-
-        #endregion
-
-        #region Properties
-
-        public bool Crashed
-        {
-            get
-            {
-                return this._crashed;
-            }
-        }
-
-        #endregion
-
+    public partial class frmDownloadStation : SingletonForm<frmDownloadStation>
+    {       
         #region Constructor
 
         public frmDownloadStation()
@@ -110,13 +92,13 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         private void Awesomium_Windows_Forms_WebControl_LoadingFrameFailed(object sender, LoadingFrameFailedEventArgs e)
         {
             pbLoadingIndicator.Image = pbLoadingIndicator.ErrorImage;
-            this._crashed = true;
+            this.NewIntance();
         }
 
         private void Awesomium_Windows_Forms_WebControl_Crashed(object sender, CrashedEventArgs e)
         {
             pbLoadingIndicator.Image = pbLoadingIndicator.ErrorImage;
-            this._crashed = true;
+            this.NewIntance();
         }
 
         private void Awesomium_Windows_Forms_WebControl_ShowJavascriptDialog(object sender, JavascriptDialogEventArgs e)

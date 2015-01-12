@@ -47,7 +47,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     // Start the listener
                     Adapter.Start();
                                                                                                
-                    Application.Run(Adapter.FrmSettings);
+                    Application.Run(frmSettings.Instance);
                 }
                 // An instance is allready running
                 else

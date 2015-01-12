@@ -13,7 +13,7 @@ using TheDuffman85.ContainerDecrypter;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmSettings : Form
+    public partial class frmSettings : SingletonForm<frmSettings>
     {
         #region Imports
 
@@ -43,14 +43,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #endregion
 
         #region Variables
-
+        
         private bool _close = false;        
         private bool _openingContainer = false;        
         
         #endregion
 
         #region Properties
-
+                
         public NotifyIcon NotifyIcon
         {
             get
@@ -125,7 +125,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
             // Dispose of Download Station form,
             // because the url could have been changed
-            Adapter.FrmDownloadStation.Dispose();
+            frmDownloadStation.Instance.Dispose();
 
             this.Close();  
         }
@@ -156,8 +156,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private void addLinkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Adapter.FrmAddLinks.Show();
-            Adapter.FrmAddLinks.Activate();
+            frmAddLinks.ShowInstance();
         }
         
         private void addContainerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -271,8 +270,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     if (Properties.Settings.Default.CheckClipboard &&
                         Uri.IsWellFormedUriString(text, UriKind.Absolute))
                     {
-                        Adapter.FrmAddLinks.Show();
-                        Adapter.FrmAddLinks.Activate();
+                        frmAddLinks.ShowInstance();
                     }
                 }
             }

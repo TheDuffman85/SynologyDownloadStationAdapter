@@ -13,7 +13,7 @@ using TheDuffman85.ContainerDecrypter;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmSettings : SingletonForm<frmSettings>
+    public partial class frmSettings : Form
     {
         #region Imports
 
@@ -43,13 +43,35 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #endregion
 
         #region Variables
-        
+
+        private static object _lock = new object();
+        private static frmSettings _instance;
         private bool _close = false;        
         private bool _openingContainer = false;        
         
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Lazy instance
+        /// </summary>       
+        public static frmSettings Instance
+        {
+            get
+            {
+                lock (_lock)
+                {                    
+                    if (_instance == null ||
+                        _instance.IsDisposed)
+                    {
+                        _instance = new frmSettings();
+                    }
+                }
+
+                return _instance;
+            }
+        }
                 
         public NotifyIcon NotifyIcon
         {
@@ -63,7 +85,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         #region Constructor
 
-        public frmSettings()
+        private frmSettings()
         {
             InitializeComponent();
             this.Opacity = 0;
@@ -76,6 +98,36 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #endregion
 
         #region Eventhandler
+
+        private void frmSettings_Load(object sender, EventArgs e)
+        {
+            this.BeginInvoke(new MethodInvoker(delegate
+            {
+                this.Hide();
+                this.Opacity = 1;
+            }));            
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == WM_CLIPBOARDUPDATE)
+            {
+                IDataObject iData = Clipboard.GetDataObject();
+
+                if (iData.GetDataPresent(DataFormats.Text))
+                {
+                    string text = (string)iData.GetData(DataFormats.Text);
+
+                    if (Properties.Settings.Default.CheckClipboard &&
+                        Uri.IsWellFormedUriString(text, UriKind.Absolute))
+                    {
+                        frmAddLinks.ShowInstance();
+                    }
+                }
+            }
+        }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -244,36 +296,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Adapter.OpenDownloadStation();
-        }
-
-        private void frmSettings_Load(object sender, EventArgs e)
-        {
-            this.BeginInvoke(new MethodInvoker(delegate
-            {
-                this.Hide();
-                this.Opacity = 1;
-            }));
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);
-
-            if (m.Msg == WM_CLIPBOARDUPDATE)
-            {
-                IDataObject iData = Clipboard.GetDataObject();
-
-                if (iData.GetDataPresent(DataFormats.Text))
-                {
-                    string text = (string)iData.GetData(DataFormats.Text);
-
-                    if (Properties.Settings.Default.CheckClipboard &&
-                        Uri.IsWellFormedUriString(text, UriKind.Absolute))
-                    {
-                        frmAddLinks.ShowInstance();
-                    }
-                }
-            }
         }
 
         #endregion  

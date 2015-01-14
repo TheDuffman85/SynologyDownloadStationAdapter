@@ -11,19 +11,70 @@ using System.Windows.Forms;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmAddLinks : SingletonForm<frmAddLinks>
+    public partial class frmAddLinks : Form
     {
         #region Variable
 
+        private static object _lock = new object();
+        private static frmAddLinks _instance;
         private bool _loading = true;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Lazy instance
+        /// </summary>       
+        public static frmAddLinks Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance == null ||
+                        _instance.IsDisposed)
+                    {
+                        _instance = new frmAddLinks();
+                    }
+                }
+
+                return _instance;
+            }
+        }
 
         #endregion
 
         #region Constructor
 
-        public frmAddLinks()
+        private frmAddLinks()
         {
             InitializeComponent();
+        }
+
+        #endregion
+
+        #region Statiic Methods
+
+        public static void ShowInstance()
+        {
+            Instance.Show();
+            Instance.Activate();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void CheckClipboard()
+        {
+            if (Properties.Settings.Default.CheckClipboard)
+            {
+                if (Clipboard.ContainsText())
+                {
+                    txtLinks.Text = Clipboard.GetText();
+                }
+            }
         }
 
         #endregion
@@ -72,19 +123,10 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         #endregion
 
-        #region Methods
 
-        private void CheckClipboard()
-        {
-            if (Properties.Settings.Default.CheckClipboard)
-            {
-                if (Clipboard.ContainsText())
-                {
-                    txtLinks.Text = Clipboard.GetText();
-                }
-            }
-        }
 
-        #endregion
+        
     }
+
+    
 }

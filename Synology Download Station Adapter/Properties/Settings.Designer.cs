@@ -127,5 +127,17 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
                 this["SizeY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CheckedVersion {
+            get {
+                return ((int)(this["CheckedVersion"]));
+            }
+            set {
+                this["CheckedVersion"] = value;
+            }
+        }
     }
 }

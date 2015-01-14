@@ -9,18 +9,44 @@ using System.Windows.Forms;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmSelectHoster : SingletonForm<frmSelectHoster>
+    public partial class frmSelectHoster : Form
     {
         #region Variables
 
+        private static object _lock = new object();
+        private static frmSelectHoster _instance;
         Dictionary<string, List<string>> _validHostLinks;
         bool _close = false;
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Lazy instance
+        /// </summary>       
+        public static frmSelectHoster Instance
+        {
+            get
+            {
+                lock (_lock)
+                {                    
+                    if (_instance == null ||
+                        _instance.IsDisposed)
+                    {
+                        _instance = new frmSelectHoster();
+                    }
+                }
+
+                return _instance;
+            }
+        }      
+
+        #endregion
+
         #region Constructor
 
-        public frmSelectHoster()
+        private frmSelectHoster()
         {
             InitializeComponent();
         }

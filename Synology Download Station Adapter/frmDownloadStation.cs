@@ -14,11 +14,49 @@ using TheDuffman85.SynologyDownloadStationAdapter.Properties;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public partial class frmDownloadStation : SingletonForm<frmDownloadStation>
-    {       
+    public partial class frmDownloadStation : Form
+    {
+        #region Variables
+
+        private static object _lock = new object();
+        private static frmDownloadStation _instance;
+        private bool _newInstance = false;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Lazy instance
+        /// </summary>       
+        public static frmDownloadStation Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance != null &&
+                        _instance._newInstance)
+                    {
+                        _instance.Dispose();
+                    }
+
+                    if (_instance == null ||
+                        _instance.IsDisposed)
+                    {
+
+                    }
+                }
+
+                return _instance;
+            }
+        }
+
+        #endregion
+
         #region Constructor
 
-        public frmDownloadStation()
+        private frmDownloadStation()
         {
             InitializeComponent();
 
@@ -34,6 +72,28 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
             this.Width = Settings.Default.SizeX;
             this.Height = Settings.Default.SizeY;
+        }
+
+        #endregion
+
+        #region Statiic Methods
+
+        public static void ShowInstance()
+        {
+            Instance.Show();
+            Instance.Activate();
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Create a new instance on next call
+        /// </summary>
+        protected void NewIntance()
+        {
+            _instance._newInstance = true;
         }
 
         #endregion

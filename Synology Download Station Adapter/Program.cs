@@ -44,9 +44,12 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     Application.SetCompatibleTextRenderingDefault(false);
                     Application.ApplicationExit += OnApplicationExit;
 
+                    // Check for updates
+                    Adapter.CheckUpdate();
+
                     // Start the listener
                     Adapter.Start();
-                                                                                               
+                                                                                              
                     Application.Run(frmSettings.Instance);
                 }
                 // An instance is allready running

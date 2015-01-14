@@ -39,7 +39,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private static HttpListener _httpListener;       
         private static Dictionary<string, string> _fileDownloads;
-        private static WebRequest _checkNewReleaseRequest;
+        //private static WebRequest _checkNewReleaseRequest;
+        private static System.Timers.Timer _checkNewReleaseTimer;
         
         #endregion   
 
@@ -68,6 +69,11 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
             _fileDownloads = new Dictionary<string, string>();
 
+            _checkNewReleaseTimer = new System.Timers.Timer();
+            _checkNewReleaseTimer.Elapsed +=_checkNewReleaseTimer_Elapsed;
+            _checkNewReleaseTimer.Interval = 43200000; // Every 12 hours
+            _checkNewReleaseTimer.Start() ;
+
             try
             {
                 _httpListener.Start();
@@ -94,6 +100,11 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 IAsyncResult result = _httpListener.BeginGetContext(new AsyncCallback(WebRequestCallback), _httpListener);
             }
                       
+        }
+
+        private static void _checkNewReleaseTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            CheckUpdateAsync();    
         }
 
         /// <remarks>
@@ -623,57 +634,59 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 Process.Start("http://" + Properties.Settings.Default.Address);
             }
         }
-        
-        public static void CheckUpdate()
+
+        public static void CheckUpdateAsync()
+        {
+            new Task(() => { CheckUpdate(); }).Start();             
+        }
+
+        private static void CheckUpdate()
         {
             try
             {
-                _checkNewReleaseRequest = WebRequest.Create(LASTEST_RELEASE_URL);
-                _checkNewReleaseRequest.BeginGetResponse(new AsyncCallback(CheckNewRelease_Response), null);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(LASTEST_RELEASE_URL);
+                request.Referer = "http://SynologyDownloadStationAdapte.update";
+
+                WebResponse response = request.GetResponse();
+
+                if (response != null &&
+                response.ResponseUri.Segments != null &&
+                response.ResponseUri.Segments.Length > 0)
+                {
+                    int gitVersion = 0;
+                    int currentVersion = 0;
+                    string gitVersionStr = response.ResponseUri.Segments.Last();
+                    string currentVersionStr = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+
+                    if (int.TryParse(gitVersionStr.Replace(".", ""), out gitVersion) &&
+                        int.TryParse(currentVersionStr.Replace(".", ""), out currentVersion))
+                    {
+                        if (gitVersion > Properties.Settings.Default.CheckedVersion &&
+                            gitVersion > currentVersion)
+                        {
+                            Properties.Settings.Default.CheckedVersion = gitVersion;
+                            Properties.Settings.Default.Save();
+
+                            frmSettings.Instance.BeginInvoke(new MethodInvoker(delegate
+                            {
+                                DialogResult mbResult = MessageBox.Show(frmSettings.Instance, "There is a new version available. Do you want to download it now?", "Synology Download Station Adapter", MessageBoxButtons.YesNo);
+
+                                if (mbResult == DialogResult.Yes)
+                                {
+                                    Process.Start(LASTEST_RELEASE_URL);
+                                }
+
+                            }));
+                        }
+                    }
+                }
             }
             catch
             {
                 // Throw no error here
-            }            
-        }
-
-        private static void CheckNewRelease_Response(IAsyncResult result)
-        {
-            WebResponse response = _checkNewReleaseRequest.EndGetResponse(result);
-
-            if (response != null &&
-                response.ResponseUri.Segments != null &&
-                response.ResponseUri.Segments.Length > 0)
-            {
-                int gitVersion = 0;
-                int currentVersion = 0;
-                string gitVersionStr = response.ResponseUri.Segments.Last();                
-                string currentVersionStr = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-
-                if (int.TryParse(gitVersionStr.Replace(".", ""), out gitVersion) &&
-                    int.TryParse(currentVersionStr.Replace(".", ""), out currentVersion))
-                {
-                    if (gitVersion > Properties.Settings.Default.CheckedVersion &&
-                        gitVersion > currentVersion)
-                    {  
-                        Properties.Settings.Default.CheckedVersion = gitVersion;
-                        Properties.Settings.Default.Save();                        
-
-                        frmSettings.Instance.BeginInvoke(new MethodInvoker(delegate
-                        {                        
-                            DialogResult mbResult = MessageBox.Show(frmSettings.Instance, "There is a new version available. Do you want to download it now?", "Synology Download Station Adapter", MessageBoxButtons.YesNo);
-
-                            if (mbResult == DialogResult.Yes)
-                            {
-                                Process.Start(LASTEST_RELEASE_URL);
-                            }
-
-                        }));
-                    }
-                }
             }
         }
-
+                
         #endregion
     }
 }

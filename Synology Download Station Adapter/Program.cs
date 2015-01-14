@@ -45,7 +45,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     Application.ApplicationExit += OnApplicationExit;
 
                     // Check for updates
-                    Adapter.CheckUpdate();
+                    Adapter.CheckUpdateAsync();
 
                     // Start the listener
                     Adapter.Start();

@@ -44,7 +44,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     if (_instance == null ||
                         _instance.IsDisposed)
                     {
-
+                        _instance = new frmDownloadStation();
                     }
                 }
 

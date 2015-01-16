@@ -67,8 +67,12 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             webPreferences.JavascriptViewChangeSource = false;
             webPreferences.JavascriptViewEvents = false;
             webPreferences.JavascriptViewExecute = false;
+            webSessionProvider.DataPath = "Session";
             webSessionProvider.Preferences = webPreferences;
             webSessionProvider.Views.Add(this.webControl);
+            
+
+            
 
             this.Width = Settings.Default.SizeX;
             this.Height = Settings.Default.SizeY;
@@ -138,7 +142,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 {
                     string js = "$('login_username').setValue('" + Properties.Settings.Default.Username + "');" +
                                 "$('login_passwd').setValue('" + Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)) + "');" +
-                                "$('ext-gen32').click()";
+                                "$('ext-gen31').click();" +
+                                "$('ext-gen32').click();";
 
                     webControl.ExecuteJavascript(js);
                 }

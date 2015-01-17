@@ -60,18 +60,13 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             InitializeComponent();
 
-            // Provide current culture to Awesomium
-            Awesomium.Windows.Forms.WebSessionProvider webSessionProvider = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
-            Awesomium.Core.WebPreferences webPreferences = new Awesomium.Core.WebPreferences(true);
-            webPreferences.AcceptLanguage = CultureInfo.CurrentCulture.Name + "," + CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-            webPreferences.JavascriptViewChangeSource = false;
-            webPreferences.JavascriptViewEvents = false;
-            webPreferences.JavascriptViewExecute = false;
-            webSessionProvider.DataPath = "Session";
-            webSessionProvider.Preferences = webPreferences;
-            webSessionProvider.Views.Add(this.webControl);
-            
+            // Create a WebSession.
+            WebSession session = WebCore.CreateWebSession("Session", new WebPreferences()
+            {
+                AcceptLanguage = CultureInfo.CurrentCulture.Name + "," + CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+            });
 
+            webControl.WebSession = session;
             
 
             this.Width = Settings.Default.SizeX;

@@ -60,14 +60,11 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             InitializeComponent();
 
-            // Create a WebSession.
-            WebSession session = WebCore.CreateWebSession("Session", new WebPreferences()
+            // Add a WebSession.
+            webControl.WebSession = WebCore.CreateWebSession("Session", new WebPreferences()
             {
                 AcceptLanguage = CultureInfo.CurrentCulture.Name + "," + CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-            });
-
-            webControl.WebSession = session;
-            
+            });            
 
             this.Width = Settings.Default.SizeX;
             this.Height = Settings.Default.SizeY;

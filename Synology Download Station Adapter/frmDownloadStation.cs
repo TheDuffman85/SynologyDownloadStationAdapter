@@ -72,7 +72,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         #endregion
 
-        #region Statiic Methods
+        #region Static Methods
 
         public static void ShowInstance()
         {

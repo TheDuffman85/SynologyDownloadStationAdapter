@@ -112,19 +112,36 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WM_CLIPBOARDUPDATE)
+            if (m.Msg == WM_CLIPBOARDUPDATE &&
+                Properties.Settings.Default.CheckClipboard)
             {
-                IDataObject iData = Clipboard.GetDataObject();
-
-                if (iData.GetDataPresent(DataFormats.Text))
+                if (Clipboard.ContainsText())
                 {
-                    string text = (string)iData.GetData(DataFormats.Text);
-
-                    if (Properties.Settings.Default.CheckClipboard &&
-                        Uri.IsWellFormedUriString(text, UriKind.Absolute))
+                    string text = Clipboard.GetText();
+                    
+                    if (!string.IsNullOrEmpty(text))
                     {
-                        frmAddLinks.ShowInstance();
+                        string[] split = text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                        bool url = false;
+
+                        foreach (string item in split)
+                        {
+                            if (Uri.IsWellFormedUriString(item, UriKind.Absolute))
+                            {
+                                url = true;
+                                break;
+                            }
+                        }
+
+                        if (url)
+                        {
+                            frmAddLinks.ShowInstance();
+                        }
                     }
+
+
+                    
                 }
             }
         }

@@ -72,7 +72,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             {
                 if (Clipboard.ContainsText())
                 {
-                    txtLinks.Text = Clipboard.GetText();
+                    txtLinks.Text = Clipboard.GetText();                    
                 }
             }
         }
@@ -91,8 +91,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
-        {
+        {            
             this.Visible = false;
+            Clipboard.Clear();
             Adapter.AddLinksToDownloadStation(txtLinks.Lines.ToList());
             this.Close();
         }

@@ -222,7 +222,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     using (OpenFileDialog openFile = new OpenFileDialog())
                     {
                         openFile.Title = "Select a Container File";
-                        openFile.Filter = "Container Files (" + string.Join(" ,*", Adapter.FILE_TYPES_ALL).Trim(" ,".ToCharArray()) + ")|" + string.Join(";*", Adapter.FILE_TYPES_ALL).Trim(";".ToCharArray()) + "|All files (*.*)|*.*";
+                        openFile.Filter = "Container Files (*" + string.Join(" ,*", Adapter.FILE_TYPES_ALL).Trim(" ,".ToCharArray()) + ")|*" + string.Join(";*", Adapter.FILE_TYPES_ALL).Trim(";".ToCharArray()) + "|All files (*.*)|*.*";
                         openFile.Multiselect = false;
                         
                         if (openFile.ShowDialog() == DialogResult.OK)

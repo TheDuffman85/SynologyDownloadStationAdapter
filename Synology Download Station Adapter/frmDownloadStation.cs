@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -60,14 +61,24 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             InitializeComponent();
 
-            // Add a WebSession.
-            webControl.WebSession = WebCore.CreateWebSession("Session", new WebPreferences()
-            {
-                AcceptLanguage = CultureInfo.CurrentCulture.Name + "," + CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-            });            
-
             this.Width = Settings.Default.SizeX;
             this.Height = Settings.Default.SizeY;
+
+            try
+            {
+                // Add a WebSession.
+                webControl.WebSession = WebCore.CreateWebSession(Path.Combine(Adapter.AssemblyDirectory, "Session"), new WebPreferences()
+                {
+                    AcceptLanguage = CultureInfo.CurrentCulture.Name + "," + CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                }); 
+            }
+            catch (Exception ex)
+            {
+                Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+
+                pbLoadingIndicator.Image = pbLoadingIndicator.ErrorImage;
+                this.NewIntance();
+            }               
         }
 
         #endregion

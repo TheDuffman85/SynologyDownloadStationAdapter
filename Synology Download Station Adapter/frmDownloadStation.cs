@@ -145,7 +145,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 {
                     string js = "$('login_username').setValue('" + Properties.Settings.Default.Username + "');" +
                                 "$('login_passwd').setValue('" + Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)) + "');" +
-                                "$('ext-gen31').click();" +
+                                "if($('ext-gen31').className.indexOf('checked') < 0) { $('ext-gen31').click(); }" +
                                 "$('ext-gen32').click();";
 
                     webControl.ExecuteJavascript(js);

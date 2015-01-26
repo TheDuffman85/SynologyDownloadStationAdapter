@@ -20,7 +20,6 @@ Features
 * Add links using containers (dlc, ccf, rsdf, torrent, nzb) 
 * Add plain text links
 * Open Download Station in a Window
-* BallonTips
 * Choose hoster from which you want to add links
 * Monitor clipboard for download links
 

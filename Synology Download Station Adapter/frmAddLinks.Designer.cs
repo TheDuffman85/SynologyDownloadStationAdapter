@@ -33,8 +33,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.cbClipboard = new System.Windows.Forms.CheckBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pbClipboard = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbClipboard)).BeginInit();
             this.SuspendLayout();
             // 
             // txtLinks
@@ -45,6 +45,7 @@
             this.txtLinks.Location = new System.Drawing.Point(12, 12);
             this.txtLinks.Multiline = true;
             this.txtLinks.Name = "txtLinks";
+            this.txtLinks.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtLinks.Size = new System.Drawing.Size(310, 128);
             this.txtLinks.TabIndex = 10;
             this.txtLinks.TextChanged += new System.EventHandler(this.txtLinks_TextChanged);
@@ -84,22 +85,22 @@
             this.cbClipboard.UseVisualStyleBackColor = true;
             this.cbClipboard.CheckedChanged += new System.EventHandler(this.cbClipboard_CheckedChanged);
             // 
-            // pictureBox1
+            // pbClipboard
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox1.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.clipboard_invoice;
-            this.pictureBox1.Location = new System.Drawing.Point(29, 149);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
+            this.pbClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pbClipboard.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.clipboard_invoice;
+            this.pbClipboard.Location = new System.Drawing.Point(29, 149);
+            this.pbClipboard.Name = "pbClipboard";
+            this.pbClipboard.Size = new System.Drawing.Size(16, 16);
+            this.pbClipboard.TabIndex = 6;
+            this.pbClipboard.TabStop = false;
             // 
             // frmAddLinks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 181);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pbClipboard);
             this.Controls.Add(this.cbClipboard);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAdd);
@@ -113,7 +114,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Links";
             this.Load += new System.EventHandler(this.frmAddLinks_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbClipboard)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,6 +126,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.CheckBox cbClipboard;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pbClipboard;
     }
 }

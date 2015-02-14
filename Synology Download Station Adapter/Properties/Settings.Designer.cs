@@ -139,5 +139,17 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
                 this["CheckedVersion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowDecryptedLinks {
+            get {
+                return ((bool)(this["ShowDecryptedLinks"]));
+            }
+            set {
+                this["ShowDecryptedLinks"] = value;
+            }
+        }
     }
 }

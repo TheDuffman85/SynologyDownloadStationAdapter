@@ -57,18 +57,36 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #region Statiic Methods
 
         public static void ShowInstance()
-        {
+        {            
             Instance.Show();
             Instance.Activate();
+        }
+
+        public static void ShowInstance(string[] links)
+        {
+            Instance.SetLinks(links);
+            ShowInstance();
         }
 
         #endregion
 
         #region Methods
 
+        private void SetLinks(string[] links)
+        {
+            foreach (string link in links)
+            {
+                txtLinks.AppendText(link + "\r\n");
+            }
+
+            cbClipboard.Visible = false;
+            pbClipboard.Visible = false;
+        }
+                
         private void CheckClipboard()
         {
-            if (Properties.Settings.Default.CheckClipboard)
+            if (cbClipboard.Visible &&
+                Properties.Settings.Default.CheckClipboard)
             {
                 if (Clipboard.ContainsText())
                 {
@@ -76,7 +94,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 }
             }
         }
-
+                
         #endregion
 
         #region Eventhandler

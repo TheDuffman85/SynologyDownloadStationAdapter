@@ -50,6 +50,7 @@
             this.cbApplicationEnabled = new System.Windows.Forms.CheckBox();
             this.txtApplicationUrl = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.cbShowDecryptedLinks = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,7 +119,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(167, 181);
+            this.btnSave.Location = new System.Drawing.Point(167, 201);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 80;
@@ -128,7 +129,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(248, 181);
+            this.btnCancel.Location = new System.Drawing.Point(248, 201);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 90;
@@ -188,7 +189,7 @@
             // cbAutostart
             // 
             this.cbAutostart.AutoSize = true;
-            this.cbAutostart.Location = new System.Drawing.Point(101, 145);
+            this.cbAutostart.Location = new System.Drawing.Point(101, 139);
             this.cbAutostart.Name = "cbAutostart";
             this.cbAutostart.Size = new System.Drawing.Size(117, 17);
             this.cbAutostart.TabIndex = 70;
@@ -197,7 +198,7 @@
             // 
             // btnFileAssociation
             // 
-            this.btnFileAssociation.Location = new System.Drawing.Point(101, 116);
+            this.btnFileAssociation.Location = new System.Drawing.Point(101, 162);
             this.btnFileAssociation.Name = "btnFileAssociation";
             this.btnFileAssociation.Size = new System.Drawing.Size(222, 23);
             this.btnFileAssociation.TabIndex = 60;
@@ -232,11 +233,22 @@
             this.label4.TabIndex = 14;
             this.label4.Text = "Application Url:";
             // 
+            // cbShowDecryptedLinks
+            // 
+            this.cbShowDecryptedLinks.AutoSize = true;
+            this.cbShowDecryptedLinks.Location = new System.Drawing.Point(101, 116);
+            this.cbShowDecryptedLinks.Name = "cbShowDecryptedLinks";
+            this.cbShowDecryptedLinks.Size = new System.Drawing.Size(195, 17);
+            this.cbShowDecryptedLinks.TabIndex = 91;
+            this.cbShowDecryptedLinks.Text = "Show decrypted links before adding";
+            this.cbShowDecryptedLinks.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 216);
+            this.ClientSize = new System.Drawing.Size(335, 237);
+            this.Controls.Add(this.cbShowDecryptedLinks);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtApplicationUrl);
             this.Controls.Add(this.cbApplicationEnabled);
@@ -290,5 +302,6 @@
         private System.Windows.Forms.CheckBox cbApplicationEnabled;
         private System.Windows.Forms.TextBox txtApplicationUrl;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox cbShowDecryptedLinks;
     }
 }

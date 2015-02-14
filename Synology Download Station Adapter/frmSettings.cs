@@ -184,6 +184,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             Properties.Settings.Default.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(txtPassword.Text));
             Properties.Settings.Default.ApplicationEnabled = cbApplicationEnabled.Checked;
             Properties.Settings.Default.ApplicationUrl = txtApplicationUrl.Text;
+            Properties.Settings.Default.ShowDecryptedLinks = cbShowDecryptedLinks.Checked;
 
             Properties.Settings.Default.Save();
 
@@ -208,6 +209,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 txtPassword.Text = Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password));
                 cbApplicationEnabled.Checked = Properties.Settings.Default.ApplicationEnabled;
                 txtApplicationUrl.Text = Properties.Settings.Default.ApplicationUrl;
+                cbShowDecryptedLinks.Checked = Properties.Settings.Default.ShowDecryptedLinks;
 
                 cbAutostart.Checked = Adapter.IsAutoStart();
             }
@@ -264,7 +266,15 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                                 if (decrypter != null)
                                 {
                                     decrypter.Decrypt();
-                                    Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
+
+                                    if (Properties.Settings.Default.ShowDecryptedLinks)
+                                    {
+                                        frmAddLinks.ShowInstance(decrypter.Links);
+                                    }
+                                    else
+                                    {
+                                        Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
+                                    }
                                 }   
                             }                                                    
                         }

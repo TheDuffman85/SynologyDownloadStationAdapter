@@ -33,6 +33,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         
         private const string LASTEST_RELEASE_URL = "https://github.com/TheDuffman85/SynologyDownloadStationAdapter/releases/latest";
 
+        private const int MAX_PORTION_CHAR_SIZE = 1900;
+        private const int MAX_PORTION_LINK_COUNT = 50;
+
         #endregion
 
         #region Variables
@@ -171,7 +174,16 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     }
                     else
                     {
-                        responseString = "JDownloader";
+                        System.IO.Stream body = context.Request.InputStream;
+                        System.IO.StreamReader reader = new System.IO.StreamReader(body, context.Request.ContentEncoding);
+                        String requestBody = System.Web.HttpUtility.UrlDecode(reader.ReadToEnd());
+
+                        if (!string.IsNullOrEmpty(requestBody))
+                        {
+                            decrypter = new PlainClickNLoadDecrypter(requestBody);
+                        }
+
+                        responseString = "success\r\n";
                     }
                 }
                 else if (context.Request.RawUrl.StartsWith("/OpenFile?"))
@@ -248,7 +260,27 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                 if (decrypter != null)
                 {
-                    Adapter.AddLinksToDownloadStation(decrypter);
+                    decrypter.Decrypt();                   
+
+                    if (Properties.Settings.Default.ShowDecryptedLinks)
+                    {
+                        if (frmSettings.Instance.InvokeRequired)
+                        {
+                            frmSettings.Instance.Invoke((MethodInvoker)(() =>
+                            {
+                                frmAddLinks.ShowInstance(decrypter.Links);
+                            }
+                            ));
+                        }
+                        else
+                        {
+                            frmAddLinks.ShowInstance(decrypter.Links);
+                        }
+                    }
+                    else
+                    {
+                        Adapter.AddLinksToDownloadStation(decrypter);
+                    }
                 }
             }
         }
@@ -443,7 +475,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         public static bool AddLinksToDownloadStation(List<string> links)
         {
             DownloadStation ds = null;
-
+                        
             try
             {
                 ds = new DownloadStation(new Uri("http://" + Properties.Settings.Default.Address), Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
@@ -479,7 +511,18 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                     if (validHostLinks.Keys.Count > 1)
                     {
-                        frmSelectHoster.Instance.SelectHoster(validHostLinks);
+                        if (frmSettings.Instance.InvokeRequired)
+                        {
+                            frmSettings.Instance.Invoke((MethodInvoker)(() =>
+                            {
+                                frmSelectHoster.Instance.SelectHoster(validHostLinks);
+                            }
+                            ));
+                        }
+                        else
+                        {
+                            frmSelectHoster.Instance.SelectHoster(validHostLinks);
+                        }
                     }                                        
 
                     foreach (var validHostLink in validHostLinks)
@@ -487,21 +530,27 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         Adapter.ShowBalloonTip("Adding " + validHostLink.Value.Count + " links(s) (" + validHostLink.Key + ")", ToolTipIcon.Info);
 
                         validHostLinkCount += validHostLink.Value.Count;
-                                                
-                        // Add links to Download Station
-                        SynologyRestDAL.TResult<object> result = ds.CreateTask(string.Join(",", validHostLink.Value.ToArray()));
+                        
+                        List<List<string>> portions = CreateLinkPortions(validHostLink.Value);
 
-                        if (!result.Success)
+                        foreach (List<string> partionLinks in portions)
                         {
-                            if (result.Error.Code == 406)
+                            // Add links to Download Station
+                            SynologyRestDAL.TResult<object> result = ds.CreateTask(string.Join(",", partionLinks.ToArray()));
+
+
+                            if (!result.Success)
                             {
-                                throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
-                            }
-                            else
-                            {
-                                throw new Exception("While adding links the error code " + result.Error.Code + " occurred");
-                            }
-                        }                       
+                                if (result.Error.Code == 406)
+                                {
+                                    throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
+                                }
+                                else
+                                {
+                                    throw new Exception("While adding links the error code " + result.Error.Code + " occurred");
+                                }
+                            }  
+                        }                    
                     }
 
                     string msg = validHostLinkCount + " link(s) added";
@@ -615,6 +664,39 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     file.Close();
                 }
             }
+        }
+        
+        private static List<List<string>> CreateLinkPortions(List<string> links)
+        {
+            List<List<string>> portions = new List<List<string>>();
+            
+            List<string> currentPortion = new List<string>();
+            int currentCharSize = 0;
+            bool added = false;
+            
+            foreach (string link in links)
+            {
+                added = false;
+                currentPortion.Add(link);
+                currentCharSize += link.Length;
+
+                if (currentCharSize >= MAX_PORTION_CHAR_SIZE ||
+                   currentPortion.Count >= MAX_PORTION_LINK_COUNT)
+                {
+                    portions.Add(currentPortion);
+                    currentPortion = new List<string>();
+                    currentCharSize = 0;
+
+                    added = true;
+                }
+            }
+
+            if (!added)
+            {
+                portions.Add(currentPortion);
+            }
+
+            return portions;
         }
 
         public static void OpenFileWithRunningInstance(string path)

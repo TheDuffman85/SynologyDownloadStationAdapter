@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlainClickNLoadDecrypter.cs" />
     <Compile Include="ClickNLoadDecrypter.cs" />
     <Compile Include="DecrypterBase.cs" />
     <Compile Include="DcryptItDecrypter.cs" />

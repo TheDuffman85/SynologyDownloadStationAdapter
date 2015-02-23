@@ -68,6 +68,29 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }
         }
 
+        public static Form VisibleForm
+        {
+            get
+            {
+                if (frmDownloadStation.Instance.Visible)
+                {
+                    return frmDownloadStation.Instance;
+                }
+                else if(frmSelectHoster.Instance.Visible)
+                {
+                    return frmSelectHoster.Instance;
+                }
+                else if (frmAddLinks.Instance.Visible)
+                {
+                    return frmAddLinks.Instance;
+                }
+                else 
+                {
+                    return frmSettings.Instance;
+                }
+            }
+        }
+
         #endregion 
 
         #region Static Methods
@@ -264,9 +287,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                     if (Properties.Settings.Default.ShowDecryptedLinks)
                     {
-                        if (frmSettings.Instance.InvokeRequired)
+                        if (Adapter.VisibleForm.InvokeRequired)
                         {
-                            frmSettings.Instance.Invoke((MethodInvoker)(() =>
+                            Adapter.VisibleForm.Invoke((MethodInvoker)(() =>
                             {
                                 frmAddLinks.ShowInstance(decrypter.Links);
                             }
@@ -290,9 +313,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         /// </summary>
         /// <param name="msg">Message to show</param>
         /// <param name="icon">Icon of the ballon</param>
-        public static void ShowBalloonTip(string msg, ToolTipIcon icon)
+        public static void ShowBalloonTip(string msg, ToolTipIcon icon, int timeout = 3000)
         {
-            frmSettings.Instance.NotifyIcon.ShowBalloonTip(3000, "Synology Download Station Adapter", msg, icon);
+            frmSettings.Instance.NotifyIcon.ShowBalloonTip(timeout, "Synology Download Station Adapter", msg, icon);
         }
 
         /// <summary>
@@ -489,6 +512,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     List<string> corruptedLinks = new List<string>();   
                     Uri currentLink = null;
                     int validHostLinkCount = 0;
+                    int totalLinkCount = 0;
+                    string balloonMsg;
 
                     foreach (string link in links)
                     {
@@ -511,9 +536,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                     if (validHostLinks.Keys.Count > 1)
                     {
-                        if (frmSettings.Instance.InvokeRequired)
+                        if (Adapter.VisibleForm.InvokeRequired)
                         {
-                            frmSettings.Instance.Invoke((MethodInvoker)(() =>
+                            Adapter.VisibleForm.Invoke((MethodInvoker)(() =>
                             {
                                 frmSelectHoster.Instance.SelectHoster(validHostLinks);
                             }
@@ -523,44 +548,64 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         {
                             frmSelectHoster.Instance.SelectHoster(validHostLinks);
                         }
-                    }                                        
-
-                    foreach (var validHostLink in validHostLinks)
-                    {
-                        Adapter.ShowBalloonTip("Adding " + validHostLink.Value.Count + " links(s) (" + validHostLink.Key + ")", ToolTipIcon.Info);
-
-                        validHostLinkCount += validHostLink.Value.Count;
-                        
-                        List<List<string>> portions = CreateLinkPortions(validHostLink.Value);
-
-                        foreach (List<string> partionLinks in portions)
-                        {
-                            // Add links to Download Station
-                            SynologyRestDAL.TResult<object> result = ds.CreateTask(string.Join(",", partionLinks.ToArray()));
-
-
-                            if (!result.Success)
-                            {
-                                if (result.Error.Code == 406)
-                                {
-                                    throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
-                                }
-                                else
-                                {
-                                    throw new Exception("While adding links the error code " + result.Error.Code + " occurred");
-                                }
-                            }  
-                        }                    
                     }
 
-                    string msg = validHostLinkCount + " link(s) added";
+                    // Get total link count
+                    foreach (var validHostLink in validHostLinks)
+                    {
+                        totalLinkCount += validHostLink.Value.Count;
+                    }
+
+                    
+                    if (validHostLinks.Count > 0)
+                    {
+                        balloonMsg = "Adding " + totalLinkCount + " links(s) (";
+
+                        if (validHostLinks.Count > 1)
+                        {
+                            Adapter.ShowBalloonTip(balloonMsg + validHostLinks.Count + " Hosts)", ToolTipIcon.Info, 30000);
+                        }
+                        else
+                        {
+                            Adapter.ShowBalloonTip(balloonMsg + validHostLinks.First().Key + ")", ToolTipIcon.Info, 30000);
+                        }
+
+                        foreach (var validHostLink in validHostLinks)
+                        {
+                            validHostLinkCount += validHostLink.Value.Count;
+
+                            List<List<string>> portions = CreateLinkPortions(validHostLink.Value);
+
+                            foreach (List<string> partionLinks in portions)
+                            {
+                                // Add links to Download Station
+                                SynologyRestDAL.TResult<object> result = ds.CreateTask(string.Join(",", partionLinks.ToArray()));
+
+                                if (!result.Success)
+                                {
+                                    if (result.Error.Code == 406)
+                                    {
+                                        throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("While adding links the error code " + result.Error.Code + " occurred");
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    
+
+                    balloonMsg = totalLinkCount + " link(s) added";
 
                     if (corruptedLinks.Count > 0)
                     {
-                        msg += "\r\n" + corruptedLinks.Count + " links(s) were corrupted";
+                        balloonMsg += "\r\n" + corruptedLinks.Count + " links(s) were corrupted";
                     }
 
-                    Adapter.ShowBalloonTip(msg, ToolTipIcon.Info);
+                    Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info);
                     return true;
                 }
                 else
@@ -612,7 +657,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     // Login to Download Station
                     if (ds.Login())
                     {
-                        Adapter.ShowBalloonTip("Adding " + name , ToolTipIcon.Info);
+                        Adapter.ShowBalloonTip("Adding " + name , ToolTipIcon.Info, 30000);
 
                         // Register file for download
                         string fileDownload = RegisterFileDownload(path);

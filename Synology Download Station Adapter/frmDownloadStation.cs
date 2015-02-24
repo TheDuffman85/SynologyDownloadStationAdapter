@@ -20,7 +20,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         #region Variables
 
         private static object _lock = new object();
-        private static frmDownloadStation _instance;
+        private static frmDownloadStation _instance = new frmDownloadStation();
         private bool _newInstance = false;
 
         #endregion

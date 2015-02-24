@@ -72,22 +72,27 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {
             get
             {
-                if (frmDownloadStation.Instance.Visible)
-                {
-                    return frmDownloadStation.Instance;
-                }
-                else if(frmSelectHoster.Instance.Visible)
-                {
-                    return frmSelectHoster.Instance;
-                }
-                else if (frmAddLinks.Instance.Visible)
-                {
-                    return frmAddLinks.Instance;
-                }
-                else 
-                {
-                    return frmSettings.Instance;
-                }
+
+                return (Form)frmSettings.Instance.Invoke(new Func<Form>(
+                        delegate
+                        {
+                            if (frmDownloadStation.Instance.Visible)
+                            {
+                                return frmDownloadStation.Instance;
+                            }
+                            else if (frmSelectHoster.Instance.Visible)
+                            {
+                                return frmSelectHoster.Instance;
+                            }
+                            else if (frmAddLinks.Instance.Visible)
+                            {
+                                return frmAddLinks.Instance;
+                            }
+                            else
+                            {
+                                return frmSettings.Instance;
+                            }
+                        }));               
             }
         }
 
@@ -283,7 +288,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                 if (decrypter != null)
                 {
-                    decrypter.Decrypt();                   
+                    try
+                    {
+                        decrypter.Decrypt();
+                    }
+                    catch (Exception ex)
+                    {
+                        Adapter.ShowBalloonTip(ex.Message, ToolTipIcon.Error);
+                    }          
 
                     if (Properties.Settings.Default.ShowDecryptedLinks)
                     {

@@ -322,7 +322,18 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Adapter.OpenDownloadStation();
+            if (Adapter.VisibleForm.InvokeRequired)
+            {
+                Adapter.VisibleForm.Invoke((MethodInvoker)(() =>
+                {
+                    Adapter.OpenDownloadStation();
+                }
+                ));
+            }
+            else
+            {
+                Adapter.OpenDownloadStation();
+            }            
         }
 
         #endregion  

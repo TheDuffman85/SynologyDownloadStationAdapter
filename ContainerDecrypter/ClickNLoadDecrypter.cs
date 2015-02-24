@@ -36,13 +36,16 @@ namespace TheDuffman85.ContainerDecrypter
         {
             links = null;
             password = null;
+
+            // unescape content
+            content =  Regex.Unescape(content);
             
             // get encrypted data
             Regex rgxData = new Regex("crypted=(.*?)(&|$)");
             String data = rgxData.Match(content).Groups[1].ToString();
 
             // get encrypted pass
-            Regex rgxKey = new Regex("jk=(.*?){(.*?)}(&|$)");
+            Regex rgxKey = new Regex("jk=(.*?){(.*?)}(;|&|$)");
             String key = rgxKey.Match(content).Groups[2].ToString();
 
             // get archive password

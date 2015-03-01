@@ -110,7 +110,6 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 220);
             this.Name = "frmAddLinks";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Links";
             this.Load += new System.EventHandler(this.frmAddLinks_Load);

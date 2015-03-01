@@ -72,7 +72,6 @@
             this.Name = "frmDownloadStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Download Station";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmDownloadStation_FormClosing);
             this.Load += new System.EventHandler(this.frmDownloadStation_Load);
             this.ResizeEnd += new System.EventHandler(this.frmDownloadStation_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.pbLoadingIndicator)).EndInit();

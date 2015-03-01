@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -93,6 +94,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             AddClipboardFormatListener(this.Handle); 
 
             this.btnFileAssociation.Text = string.Format(this.btnFileAssociation.Text, string.Join(",", Adapter.FILE_TYPES_ALL) );
+            this.lblVersion.Text = string.Format(this.lblVersion.Text, FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion);
         }
 
         #endregion
@@ -138,10 +140,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         {
                             frmAddLinks.ShowInstance();
                         }
-                    }
-
-
-                    
+                    }                    
                 }
             }
         }
@@ -322,21 +321,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (Adapter.VisibleForm.InvokeRequired)
-            {
-                Adapter.VisibleForm.Invoke((MethodInvoker)(() =>
-                {
-                    Adapter.OpenDownloadStation();
-                }
-                ));
-            }
-            else
-            {
-                Adapter.OpenDownloadStation();
-            }            
+            Adapter.OpenDownloadStation();
         }
 
-        #endregion  
+        private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Adapter.RELEASE_URL);
+        }
 
+        #endregion 
     }
 }

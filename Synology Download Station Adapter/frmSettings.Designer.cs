@@ -51,14 +51,12 @@
             this.txtApplicationUrl = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbShowDecryptedLinks = new System.Windows.Forms.CheckBox();
+            this.lblVersion = new System.Windows.Forms.LinkLabel();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
             // 
-            this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon.BalloonTipText = "Test Text";
-            this.notifyIcon.BalloonTipTitle = "Test Titel";
             this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Synology Download Station Adapter";
@@ -243,11 +241,23 @@
             this.cbShowDecryptedLinks.Text = "Show decrypted links before adding";
             this.cbShowDecryptedLinks.UseVisualStyleBackColor = true;
             // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(13, 211);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(59, 13);
+            this.lblVersion.TabIndex = 92;
+            this.lblVersion.TabStop = true;
+            this.lblVersion.Text = "Version {0}";
+            this.lblVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVersion_LinkClicked);
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(335, 237);
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.cbShowDecryptedLinks);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtApplicationUrl);
@@ -267,7 +277,6 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmSettings";
-            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
@@ -303,5 +312,6 @@
         private System.Windows.Forms.TextBox txtApplicationUrl;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox cbShowDecryptedLinks;
+        private System.Windows.Forms.LinkLabel lblVersion;
     }
 }

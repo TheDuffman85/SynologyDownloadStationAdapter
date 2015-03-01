@@ -30,8 +30,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         private const string REG_KEY_NAME = "SynologyDownloadStationAdapter";
         public static readonly string[] FILE_TYPES_ALL = new string[] { ".dlc", ".ccf", ".rsdf", ".torrent", ".nzb" };
         public static readonly string[] FILE_TYPES_NO_DECRYPT = new string[] { ".torrent", ".nzb" };
-        
-        private const string LASTEST_RELEASE_URL = "https://github.com/TheDuffman85/SynologyDownloadStationAdapter/releases/latest";
+
+        public const string RELEASE_URL = "https://github.com/TheDuffman85/SynologyDownloadStationAdapter/releases";
+        public const string LASTEST_RELEASE_URL = "https://github.com/TheDuffman85/SynologyDownloadStationAdapter/releases/latest";
 
         private const int MAX_PORTION_CHAR_SIZE = 1900;
         private const int MAX_PORTION_LINK_COUNT = 50;
@@ -42,7 +43,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private static HttpListener _httpListener;       
         private static Dictionary<string, string> _fileDownloads;
-        //private static WebRequest _checkNewReleaseRequest;
         private static System.Timers.Timer _checkNewReleaseTimer;
         
         #endregion   
@@ -65,34 +65,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 UriBuilder uri = new UriBuilder(codeBase);
                 string path = Uri.UnescapeDataString(uri.Path);
                 return Path.GetDirectoryName(path);
-            }
-        }
-
-        public static Form VisibleForm
-        {
-            get
-            {
-
-                return (Form)frmSettings.Instance.Invoke(new Func<Form>(
-                        delegate
-                        {
-                            if (frmDownloadStation.Instance.Visible)
-                            {
-                                return frmDownloadStation.Instance;
-                            }
-                            else if (frmSelectHoster.Instance.Visible)
-                            {
-                                return frmSelectHoster.Instance;
-                            }
-                            else if (frmAddLinks.Instance.Visible)
-                            {
-                                return frmAddLinks.Instance;
-                            }
-                            else
-                            {
-                                return frmSettings.Instance;
-                            }
-                        }));               
             }
         }
 
@@ -299,18 +271,12 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
                     if (Properties.Settings.Default.ShowDecryptedLinks)
                     {
-                        if (Adapter.VisibleForm.InvokeRequired)
+                        frmSettings.Instance.Invoke((MethodInvoker)(() =>
                         {
-                            Adapter.VisibleForm.Invoke((MethodInvoker)(() =>
-                            {
-                                frmAddLinks.ShowInstance(decrypter.Links);
-                            }
-                            ));
-                        }
-                        else
-                        {
+                            // Run on UI thread
                             frmAddLinks.ShowInstance(decrypter.Links);
                         }
+                        ));
                     }
                     else
                     {
@@ -547,19 +513,13 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     }
 
                     if (validHostLinks.Keys.Count > 1)
-                    {
-                        if (Adapter.VisibleForm.InvokeRequired)
+                    {                        
+                        frmSettings.Instance.Invoke((MethodInvoker)(() =>
                         {
-                            Adapter.VisibleForm.Invoke((MethodInvoker)(() =>
-                            {
-                                frmSelectHoster.Instance.SelectHoster(validHostLinks);
-                            }
-                            ));
-                        }
-                        else
-                        {
+                            // Run on UI thread
                             frmSelectHoster.Instance.SelectHoster(validHostLinks);
                         }
+                        ));
                     }
 
                     // Get total link count
@@ -597,11 +557,11 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                                 {
                                     if (result.Error.Code == 406)
                                     {
-                                        throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
+                                        throw new Exception("Couldn't add link(s). You have to choose a download folder for your Download Station.");
                                     }
                                     else
                                     {
-                                        throw new Exception("While adding links the error code " + result.Error.Code + " occurred");
+                                        throw new Exception("While adding link(s) the error code " + result.Error.Code + " occurred");
                                     }
                                 }
                             }
@@ -681,7 +641,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         {
                             if (result.Error.Code == 406)
                             {
-                                throw new Exception("Couldn't add link. You have to choose a download folder for your Download Station.");
+                                throw new Exception("Couldn't add link(s). You have to choose a download folder for your Download Station.");
                             }
                             else
                             {
@@ -795,7 +755,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(LASTEST_RELEASE_URL);
-                request.Referer = "http://SynologyDownloadStationAdapte.update";
+                request.Referer = "UpdateCheck";
 
                 WebResponse response = request.GetResponse();
 

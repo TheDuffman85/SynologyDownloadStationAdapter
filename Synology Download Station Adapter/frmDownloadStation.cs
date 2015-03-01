@@ -126,16 +126,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             e.Handled = Awesomium.Core.EventHandling.Modal;
             e.Ignore = true;
         }
-
-        private void frmDownloadStation_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                this.Visible = false;
-            }
-        }
-
+        
         private void webControl_DocumentReady(object sender, DocumentReadyEventArgs e)
         {
             if (e.Url.Segments.Length == 3 &&

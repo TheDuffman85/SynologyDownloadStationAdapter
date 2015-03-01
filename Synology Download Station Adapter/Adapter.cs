@@ -567,17 +567,16 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                             }
                         }
 
+                        balloonMsg = totalLinkCount + " link(s) added";
+
+                        if (corruptedLinks.Count > 0)
+                        {
+                            balloonMsg += "\r\n" + corruptedLinks.Count + " links(s) were corrupted";
+                        }
+
+                        Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info);                        
                     }
-                    
 
-                    balloonMsg = totalLinkCount + " link(s) added";
-
-                    if (corruptedLinks.Count > 0)
-                    {
-                        balloonMsg += "\r\n" + corruptedLinks.Count + " links(s) were corrupted";
-                    }
-
-                    Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info);
                     return true;
                 }
                 else

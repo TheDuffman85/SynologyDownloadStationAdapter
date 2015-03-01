@@ -43,6 +43,7 @@
             this.clbHoster.Name = "clbHoster";
             this.clbHoster.Size = new System.Drawing.Size(281, 109);
             this.clbHoster.TabIndex = 0;
+            this.clbHoster.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbHoster_ItemCheck);
             // 
             // btnSelectAll
             // 
@@ -91,7 +92,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select Hoster";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSelectHoster_FormClosing);
-            this.Shown += new System.EventHandler(this.frmSelectHoster_Shown);
             this.ResumeLayout(false);
 
         }

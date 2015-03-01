@@ -111,13 +111,23 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
             this.ShowDialog();
         }
-
-        private void frmSelectHoster_Shown(object sender, EventArgs e)
+        
+        private void clbHoster_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            // For some reason the very first time the windows was shown in background. This workaround will fix that.
-            this.TopMost = true;            
+            if (e.NewValue == CheckState.Checked ||
+                clbHoster.CheckedItems.Count > 1 ||
+               (clbHoster.CheckedItems.Count == 1 && e.NewValue != CheckState.Unchecked))
+            {
+                btnOk.Text = "Ok";
+            }
+            else
+            {
+                btnOk.Text = "Cancel";
+            }
         }
 
         #endregion 
+
+        
     }
 }

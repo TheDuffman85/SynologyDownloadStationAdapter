@@ -95,7 +95,38 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
             this.btnFileAssociation.Text = string.Format(this.btnFileAssociation.Text, string.Join(",", Adapter.FILE_TYPES_ALL) );
             this.lblVersion.Text = string.Format(this.lblVersion.Text, FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion);
+
+            InitBookmarks();
         }
+
+        #endregion
+
+        #region Methods
+
+        public void InitBookmarks()
+        {
+            // Remove previous items if necessary
+            if (bookmarksToolStripMenuItem.DropDownItems.Count > 2)
+            {
+                for (int i = bookmarksToolStripMenuItem.DropDownItems.Count-3; i >= 0; i--)
+                {
+                    bookmarksToolStripMenuItem.DropDownItems.RemoveAt(i);
+                }
+            }
+
+            DataRow row;
+
+            for (int i = frmBookmarks.Instance.Bookmarks.Rows.Count - 1; i >= 0; i--)
+            {
+                row = frmBookmarks.Instance.Bookmarks.Rows[i];
+
+                ToolStripMenuItem item = new ToolStripMenuItem(row["Name"].ToString(), (Image)row["Icon"]);
+                item.Tag = row["Url"];
+                item.Click += bookmarkToolStripMenuItem_Click;
+
+                bookmarksToolStripMenuItem.DropDownItems.Insert(0, item);
+            } 
+        }       
 
         #endregion
 
@@ -143,19 +174,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     }                    
                 }
             }
-        }
-
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Normal;
-            this.Show();
-            this.Activate();
-        }        
-
-        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _close = true;
-            this.Close();            
         }
 
         private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
@@ -213,22 +231,65 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 cbAutostart.Checked = Adapter.IsAutoStart();
             }
         }
-
-        private void openDiskstationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Adapter.OpenDownloadStation();
-        }
-        
+                
         private void btnFileAssociation_Click(object sender, EventArgs e)
         {
             Adapter.AssociateFileTypes();
         }    
 
+        
+        private void cbApplicationUrl_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbApplicationEnabled.Checked)
+            {
+                txtApplicationUrl.Enabled = false;
+                txtApplicationUrl.Text = string.Empty;
+            }
+            else
+            {
+                txtApplicationUrl.Enabled = true;                
+                if (string.IsNullOrEmpty(txtApplicationUrl.Text))
+                {
+                    txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/index.cgi";
+                }
+            }
+        }        
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Adapter.OpenDownloadStation();
+        }
+
+        private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Adapter.RELEASE_URL);
+        }
+
+        #region ContextMenu
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.Show();
+            this.Activate();
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _close = true;
+            this.Close();
+        }
+
+        private void openDiskstationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Adapter.OpenDownloadStation();
+        }
+
         private void addLinkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmAddLinks.ShowInstance();
-        }
-        
+        }  
+
         private void addContainerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!this._openingContainer)
@@ -242,7 +303,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         openFile.Title = "Select a Container File";
                         openFile.Filter = "Container Files (*" + string.Join(" ,*", Adapter.FILE_TYPES_ALL).Trim(" ,".ToCharArray()) + ")|*" + string.Join(";*", Adapter.FILE_TYPES_ALL).Trim(";".ToCharArray()) + "|All files (*.*)|*.*";
                         openFile.Multiselect = false;
-                        
+
                         if (openFile.ShowDialog() == DialogResult.OK)
                         {
                             if (Adapter.FILE_TYPES_NO_DECRYPT.Contains(Path.GetExtension(openFile.FileName).ToLower()))
@@ -274,8 +335,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                                     {
                                         Adapter.AddLinksToDownloadStation(decrypter.Links.ToList());
                                     }
-                                }   
-                            }                                                    
+                                }
+                            }
                         }
                     }
                 }
@@ -286,23 +347,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 finally
                 {
                     this._openingContainer = false;
-                }
-            }                       
-        }
-
-        private void cbApplicationUrl_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!cbApplicationEnabled.Checked)
-            {
-                txtApplicationUrl.Enabled = false;
-                txtApplicationUrl.Text = string.Empty;
-            }
-            else
-            {
-                txtApplicationUrl.Enabled = true;                
-                if (string.IsNullOrEmpty(txtApplicationUrl.Text))
-                {
-                    txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/index.cgi";
                 }
             }
         }
@@ -319,16 +363,20 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }
         }
 
-        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Adapter.OpenDownloadStation();
+            frmBookmarks.ShowInstance();
         }
 
-        private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void bookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Adapter.RELEASE_URL);
+            string url = ((ToolStripMenuItem)sender).Tag.ToString();
+            Process.Start(url);
         }
 
+        #endregion
+        
         #endregion 
+
     }
 }

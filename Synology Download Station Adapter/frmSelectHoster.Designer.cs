@@ -91,6 +91,7 @@
             this.Name = "frmSelectHoster";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select Hoster";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSelectHoster_FormClosing);
             this.ResumeLayout(false);
 

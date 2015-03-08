@@ -97,11 +97,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Favicon.cs" />
     <Compile Include="frmAddLinks.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmAddLinks.Designer.cs">
       <DependentUpon>frmAddLinks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmBookmarks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBookmarks.Designer.cs">
+      <DependentUpon>frmBookmarks.cs</DependentUpon>
     </Compile>
     <Compile Include="frmDownloadStation.cs">
       <SubType>Form</SubType>
@@ -124,8 +134,14 @@
     <Compile Include="Adapter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebClientExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="frmAddLinks.resx">
       <DependentUpon>frmAddLinks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBookmarks.resx">
+      <DependentUpon>frmBookmarks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDownloadStation.resx">
       <DependentUpon>frmDownloadStation.cs</DependentUpon>
@@ -137,15 +153,10 @@
       <DependentUpon>frmSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config" />
     <None Include="Icons\Farm Fresh Iconset %283000 icons%29 Fatcow Web Hosting.URL" />
     <None Include="Properties\app.manifest" />
@@ -153,6 +164,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -166,14 +182,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\bookmark.png" />
+    <None Include="Icons\add.png" />
+    <Content Include="Icons\bookmark.ico" />
+    <None Include="Icons\bullet_arrow_down.png" />
+    <None Include="Icons\bullet_arrow_up.png" />
     <Content Include="Icons\clipboard_invoice.png" />
     <Content Include="Icons\cog.ico" />
     <Content Include="Icons\cog.png" />
     <Content Include="Icons\cross.png" />
+    <None Include="Icons\delete.png" />
     <Content Include="Icons\ds.ico" />
     <None Include="Icons\indicator.gif" />
     <None Include="Icons\Error.png" />
+    <Content Include="Icons\github.com.png" />
+    <Content Include="Icons\indicator_small.gif" />
     <Content Include="Icons\package_add.png" />
+    <None Include="Icons\pencil.png" />
+    <Content Include="Icons\synology-forum.de.png" />
     <Content Include="Icons\textfield_add.ico" />
     <Content Include="Icons\textfield_add.png" />
     <Content Include="Icons\world.png" />

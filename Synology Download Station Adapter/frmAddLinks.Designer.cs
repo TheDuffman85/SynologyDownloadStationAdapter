@@ -106,12 +106,12 @@
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.txtLinks);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 220);
             this.Name = "frmAddLinks";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Links";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.frmAddLinks_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbClipboard)).EndInit();
             this.ResumeLayout(false);

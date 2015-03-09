@@ -531,16 +531,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     
                     if (validHostLinks.Count > 0)
                     {
-                        balloonMsg = "Adding " + totalLinkCount + " links(s) (";
+                        balloonMsg = "Adding " + totalLinkCount + " links(s) (" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
 
-                        if (validHostLinks.Count > 1)
-                        {
-                            Adapter.ShowBalloonTip(balloonMsg + validHostLinks.Count + " Hosts)", ToolTipIcon.Info, 30000);
-                        }
-                        else
-                        {
-                            Adapter.ShowBalloonTip(balloonMsg + validHostLinks.First().Key + ")", ToolTipIcon.Info, 30000);
-                        }
+                        Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info, 30000);
 
                         foreach (var validHostLink in validHostLinks)
                         {
@@ -567,8 +560,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                             }
                         }
 
-                        balloonMsg = totalLinkCount + " link(s) added";
-
+                        balloonMsg = totalLinkCount + " link(s) added" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
+                                                
                         if (corruptedLinks.Count > 0)
                         {
                             balloonMsg += "\r\n" + corruptedLinks.Count + " links(s) were corrupted";

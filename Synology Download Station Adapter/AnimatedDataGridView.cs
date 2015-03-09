@@ -134,7 +134,10 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     _cells.CopyTo(rcs);
                     foreach (RowCol rc in rcs)
                     {
-                        DataGridView.InvalidateCell(rc.Column, rc.Row);
+                        if (!DataGridView.IsDisposed)
+                        {
+                            DataGridView.InvalidateCell(rc.Column, rc.Row);
+                        }
                     }
                 }
             }

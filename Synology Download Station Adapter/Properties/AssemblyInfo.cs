@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Synology Download Station Adapter")]
-[assembly: AssemblyCopyright("Copyright © TheDuffman85 2014")]
+[assembly: AssemblyCopyright("Copyright © TheDuffman85")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -36,14 +36,9 @@ Screenshots
 
 ![image 6](https://cloud.githubusercontent.com/assets/9296618/5271394/3eeea0a8-7a74-11e4-8c72-e4b26fc2f64f.png)
 
-![image 5](https://cloud.githubusercontent.com/assets/9296618/5695030/1dc6cf64-998b-11e4-9d58-d0da801d61c8.png)
-
 ![image 7](https://cloud.githubusercontent.com/assets/9296618/6581855/e9f93706-c759-11e4-8640-de8d958a78c5.png)
 
-
-
-
-
+![image 5](https://cloud.githubusercontent.com/assets/9296618/5695030/1dc6cf64-998b-11e4-9d58-d0da801d61c8.png)
 
 
 Note

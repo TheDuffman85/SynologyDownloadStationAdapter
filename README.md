@@ -22,6 +22,7 @@ Features
 * Open Download Station in a Window
 * Choose hoster from which you want to add links
 * Monitor clipboard for download links
+* Manage bookmarks
 
 Screenshots
 ==============================

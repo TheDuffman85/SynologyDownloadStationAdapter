@@ -35,7 +35,6 @@
             this.bsBookmark = new System.Windows.Forms.BindingSource(this.components);
             this.dsBookmarks = new System.Data.DataSet();
             this.dtBookmarks = new System.Data.DataTable();
-            this.dataColumn1 = new System.Data.DataColumn();
             this.dataColumn2 = new System.Data.DataColumn();
             this.dataColumn3 = new System.Data.DataColumn();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
@@ -46,11 +45,12 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnDown = new System.Windows.Forms.Button();
             this.btnUp = new System.Windows.Forms.Button();
+            this.dataGridViewImageColumn4 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dgvBookmarks = new TheDuffman85.SynologyDownloadStationAdapter.AnimatedDataGridView();
+            this.dataColumn1 = new System.Data.DataColumn();
             this.iconDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.urlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewImageColumn4 = new System.Windows.Forms.DataGridViewImageColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bsBookmark)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsBookmarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtBookmarks)).BeginInit();
@@ -92,12 +92,6 @@
             this.dataColumn2,
             this.dataColumn3});
             this.dtBookmarks.TableName = "Bookmarks";
-            // 
-            // dataColumn1
-            // 
-            this.dataColumn1.Caption = "";
-            this.dataColumn1.ColumnName = "Icon";
-            this.dataColumn1.DataType = typeof(object);
             // 
             // dataColumn2
             // 
@@ -197,6 +191,14 @@
             this.btnUp.UseVisualStyleBackColor = true;
             this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
             // 
+            // dataGridViewImageColumn4
+            // 
+            this.dataGridViewImageColumn4.DataPropertyName = "Icon";
+            this.dataGridViewImageColumn4.HeaderText = "";
+            this.dataGridViewImageColumn4.Name = "dataGridViewImageColumn4";
+            this.dataGridViewImageColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewImageColumn4.Width = 30;
+            // 
             // dgvBookmarks
             // 
             this.dgvBookmarks.AllowUserToAddRows = false;
@@ -225,6 +227,12 @@
             this.dgvBookmarks.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvBookmarks_RowValidating);
             this.dgvBookmarks.SelectionChanged += new System.EventHandler(this.dgvBookmarks_SelectionChanged);
             // 
+            // dataColumn1
+            // 
+            this.dataColumn1.Caption = "";
+            this.dataColumn1.ColumnName = "Icon";
+            this.dataColumn1.DataType = typeof(object);
+            // 
             // iconDataGridViewTextBoxColumn
             // 
             this.iconDataGridViewTextBoxColumn.DataPropertyName = "Icon";
@@ -245,17 +253,10 @@
             // 
             this.urlDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.urlDataGridViewTextBoxColumn.DataPropertyName = "Url";
-            this.urlDataGridViewTextBoxColumn.HeaderText = "Url";
+            this.urlDataGridViewTextBoxColumn.HeaderText = "Address";
             this.urlDataGridViewTextBoxColumn.Name = "urlDataGridViewTextBoxColumn";
             this.urlDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewImageColumn4
-            // 
-            this.dataGridViewImageColumn4.DataPropertyName = "Icon";
-            this.dataGridViewImageColumn4.HeaderText = "";
-            this.dataGridViewImageColumn4.Name = "dataGridViewImageColumn4";
-            this.dataGridViewImageColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewImageColumn4.Width = 30;
+            this.urlDataGridViewTextBoxColumn.ToolTipText = "http, https, ftp, file, etc.";
             // 
             // frmBookmarks
             // 

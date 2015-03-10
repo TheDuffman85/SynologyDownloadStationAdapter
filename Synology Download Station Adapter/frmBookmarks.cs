@@ -286,7 +286,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private void dgvBookmarks_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            //if (dgvBookmarks.Rows[e.RowIndex] != null && !dgvBookmarks.Rows[e.RowIndex].IsNewRow && dgvBookmarks.IsCurrentRowDirty)
             if (dgvBookmarks.IsCurrentRowDirty)
             {
                 Uri url;
@@ -300,7 +299,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 else if (!Uri.TryCreate(dgvBookmarks[2, e.RowIndex].Value as string, UriKind.RelativeOrAbsolute, out url))
                 {
                     e.Cancel = true;
-                    MessageBox.Show("Enter a valid url", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Enter a valid uri", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

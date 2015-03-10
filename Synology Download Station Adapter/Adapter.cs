@@ -560,7 +560,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                             }
                         }
 
-                        balloonMsg = totalLinkCount + " link(s) added" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
+                        balloonMsg = totalLinkCount + " link(s) added (" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
                                                 
                         if (corruptedLinks.Count > 0)
                         {

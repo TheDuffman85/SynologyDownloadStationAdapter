@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using TheDuffman85.ContainerDecrypter;
 
@@ -17,6 +18,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
     public partial class frmSettings : Form
     {
         #region Imports
+
+        #if !__MonoCS__
 
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
@@ -31,6 +34,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
+
+        #endif
 
         #endregion
 
@@ -91,10 +96,27 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             InitializeComponent();
             this.Opacity = 0;
 
-            AddClipboardFormatListener(this.Handle); 
-
-            this.btnFileAssociation.Text = string.Format(this.btnFileAssociation.Text, string.Join(",", Adapter.FILE_TYPES_ALL) );
+            this.btnFileAssociation.Text = string.Format(this.btnFileAssociation.Text, string.Join(",", Adapter.FILE_TYPES_ALL));
             this.lblVersion.Text = string.Format(this.lblVersion.Text, FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion);
+
+            #if !__MonoCS__
+            AddClipboardFormatListener(this.Handle);             
+            #else       
+            // Show only on Windows                
+            btnFileAssociation.Visible = false;
+            cbAutostart.Visible = false;
+            lblApplicationUrl.Visible = false;
+            cbApplicationEnabled.Visible = false;
+            txtApplicationUrl.Visible = false;
+                        
+            cbShowDecryptedLinks.Top = cbShowDecryptedLinks.Top - 23;
+            cbIgnoreHoster.Top = cbIgnoreHoster.Top - 46;
+            Height = Height - 80;
+            
+            lblVersion.Text = lblVersion.Text + " (Mono)";
+            #endif
+
+            
 
             InitBookmarks();
         }
@@ -183,10 +205,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 e.Cancel = true;
                 this.Hide();
             }
+            #if !__MonoCS__
             else
             {
+                
                 RemoveClipboardFormatListener(this.Handle);
+                
             }
+            #endif
         }
         
         private void btnCancel_Click(object sender, EventArgs e)
@@ -199,20 +225,26 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             Properties.Settings.Default.Address = txtAddress.Text;
             Properties.Settings.Default.Username = txtUsername.Text;
             Properties.Settings.Default.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(txtPassword.Text));
+            #if !__MonoCS__
             Properties.Settings.Default.ApplicationEnabled = cbApplicationEnabled.Checked;
             Properties.Settings.Default.ApplicationUrl = txtApplicationUrl.Text;
+            #endif
             Properties.Settings.Default.ShowDecryptedLinks = cbShowDecryptedLinks.Checked;
+            Properties.Settings.Default.IgnoreHoster = cbIgnoreHoster.Checked;
 
             Properties.Settings.Default.Save();
 
+            #if !__MonoCS__
             if (cbAutostart.Checked != Adapter.IsAutoStart())
             {
                 Adapter.ToggleAutoStart();
             }
+            
 
             // Dispose of Download Station form,
             // because the url could have been changed
             frmDownloadStation.Instance.Dispose();
+            #endif
 
             this.Close();  
         }
@@ -224,22 +256,31 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 txtAddress.Text = Properties.Settings.Default.Address;
                 txtUsername.Text = Properties.Settings.Default.Username;
                 txtPassword.Text = Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password));
+                #if !__MonoCS__
                 cbApplicationEnabled.Checked = Properties.Settings.Default.ApplicationEnabled;
                 txtApplicationUrl.Text = Properties.Settings.Default.ApplicationUrl;
+                #endif
                 cbShowDecryptedLinks.Checked = Properties.Settings.Default.ShowDecryptedLinks;
+                cbIgnoreHoster.Checked = Properties.Settings.Default.IgnoreHoster;
 
+                #if !__MonoCS__
                 cbAutostart.Checked = Adapter.IsAutoStart();
+                #endif
             }
         }
                 
+        
         private void btnFileAssociation_Click(object sender, EventArgs e)
-        {
+        {   
+            #if !__MonoCS__
             Adapter.AssociateFileTypes();
+            #endif
         }    
-
+        
         
         private void cbApplicationUrl_CheckedChanged(object sender, EventArgs e)
         {
+            #if !__MonoCS__
             if (!cbApplicationEnabled.Checked)
             {
                 txtApplicationUrl.Enabled = false;
@@ -253,6 +294,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/index.cgi";
                 }
             }
+            #endif
         }        
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -308,7 +350,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         {
                             if (Adapter.FILE_TYPES_NO_DECRYPT.Contains(Path.GetExtension(openFile.FileName).ToLower()))
                             {
-                                Adapter.AddFileToDownloadStation(openFile.FileName);
+                                new Task(() => { Adapter.AddFileToDownloadStation(openFile.FileName); }).Start();  
                             }
                             else
                             {

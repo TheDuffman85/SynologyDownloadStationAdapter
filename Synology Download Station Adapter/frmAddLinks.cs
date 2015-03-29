@@ -49,7 +49,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         private frmAddLinks()
         {
-            InitializeComponent();
+            InitializeComponent();  
         }
 
         #endregion
@@ -112,7 +112,14 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {            
             this.Visible = false;
             Clipboard.Clear();
-            Adapter.AddLinksToDownloadStation(txtLinks.Lines.ToList());
+
+            frmSettings.Instance.Invoke((MethodInvoker)(() =>
+            {
+                // Run on UI thread
+                new Task(() => { Adapter.AddLinksToDownloadStation(txtLinks.Lines.ToList()); }).Start();
+            }
+            ));            
+              
             this.Close();
         }
 
@@ -140,12 +147,6 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }            
         }
 
-        #endregion
-
-
-
-        
-    }
-
-    
+        #endregion        
+    }    
 }

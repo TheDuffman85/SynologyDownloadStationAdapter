@@ -1,4 +1,6 @@
-﻿namespace TheDuffman85.SynologyDownloadStationAdapter
+﻿#if !__MonoCS__
+
+namespace TheDuffman85.SynologyDownloadStationAdapter
 {
     partial class frmDownloadStation
     {
@@ -86,3 +88,4 @@
         
     }
 }
+#endif

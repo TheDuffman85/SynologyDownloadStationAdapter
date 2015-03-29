@@ -72,6 +72,19 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Mono Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG; __MonoCS__</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono Release|AnyCPU'">
+    <OutputPath>bin\Mono Release\</OutputPath>
+    <DefineConstants> __MonoCS__</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214" />
     <Reference Include="Awesomium.Windows.Forms, Version=1.7.5.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />

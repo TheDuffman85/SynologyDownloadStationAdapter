@@ -163,5 +163,29 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
                 this["Bookmarks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IgnoreHoster {
+            get {
+                return ((bool)(this["IgnoreHoster"]));
+            }
+            set {
+                this["IgnoreHoster"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HosterSelection {
+            get {
+                return ((string)(this["HosterSelection"]));
+            }
+            set {
+                this["HosterSelection"] = value;
+            }
+        }
     }
 }

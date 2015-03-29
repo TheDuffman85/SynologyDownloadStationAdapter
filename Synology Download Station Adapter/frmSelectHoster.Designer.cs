@@ -33,6 +33,12 @@
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.btnSelectNone = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
+            this.dsSelectHoster = new System.Data.DataSet();
+            this.dtSelectHoster = new System.Data.DataTable();
+            this.colHoster = new System.Data.DataColumn();
+            this.colSelected = new System.Data.DataColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dsSelectHoster)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtSelectHoster)).BeginInit();
             this.SuspendLayout();
             // 
             // clbHoster
@@ -75,6 +81,28 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
+            // dsSelectHoster
+            // 
+            this.dsSelectHoster.DataSetName = "dsSelectHoster";
+            this.dsSelectHoster.Tables.AddRange(new System.Data.DataTable[] {
+            this.dtSelectHoster});
+            // 
+            // dtSelectHoster
+            // 
+            this.dtSelectHoster.Columns.AddRange(new System.Data.DataColumn[] {
+            this.colHoster,
+            this.colSelected});
+            this.dtSelectHoster.TableName = "SelectHoster";
+            // 
+            // colHoster
+            // 
+            this.colHoster.ColumnName = "Hoster";
+            // 
+            // colSelected
+            // 
+            this.colSelected.ColumnName = "Selected";
+            this.colSelected.DataType = typeof(bool);
+            // 
             // frmSelectHoster
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -93,6 +121,8 @@
             this.Text = "Select Hoster";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSelectHoster_FormClosing);
+            ((System.ComponentModel.ISupportInitialize)(this.dsSelectHoster)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtSelectHoster)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -103,5 +133,9 @@
         private System.Windows.Forms.Button btnSelectAll;
         private System.Windows.Forms.Button btnSelectNone;
         private System.Windows.Forms.Button btnOk;
+        private System.Data.DataSet dsSelectHoster;
+        private System.Data.DataTable dtSelectHoster;
+        private System.Data.DataColumn colHoster;
+        private System.Data.DataColumn colSelected;
     }
 }

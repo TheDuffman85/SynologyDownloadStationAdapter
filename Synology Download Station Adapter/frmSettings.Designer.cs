@@ -35,10 +35,10 @@
             this.openDiskstationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addContainerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -52,9 +52,10 @@
             this.btnFileAssociation = new System.Windows.Forms.Button();
             this.cbApplicationEnabled = new System.Windows.Forms.CheckBox();
             this.txtApplicationUrl = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblApplicationUrl = new System.Windows.Forms.Label();
             this.cbShowDecryptedLinks = new System.Windows.Forms.CheckBox();
             this.lblVersion = new System.Windows.Forms.LinkLabel();
+            this.cbIgnoreHoster = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +77,7 @@
             this.bookmarksToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(165, 158);
+            this.contextMenuStrip.Size = new System.Drawing.Size(165, 136);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // openDiskstationToolStripMenuItem
@@ -103,6 +104,14 @@
             this.addContainerToolStripMenuItem.Text = "Add Container";
             this.addContainerToolStripMenuItem.Click += new System.EventHandler(this.addContainerToolStripMenuItem_Click);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.cog;
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
             // bookmarksToolStripMenuItem
             // 
             this.bookmarksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -116,23 +125,15 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(91, 6);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.pencil;
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
             this.editToolStripMenuItem.Text = "Edit";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Image = global::TheDuffman85.SynologyDownloadStationAdapter.Properties.Resources.cog;
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
@@ -144,7 +145,8 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(167, 201);
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Location = new System.Drawing.Point(167, 229);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 80;
@@ -154,7 +156,8 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(248, 201);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Location = new System.Drawing.Point(248, 229);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 90;
@@ -223,7 +226,7 @@
             // 
             // btnFileAssociation
             // 
-            this.btnFileAssociation.Location = new System.Drawing.Point(101, 162);
+            this.btnFileAssociation.Location = new System.Drawing.Point(101, 185);
             this.btnFileAssociation.Name = "btnFileAssociation";
             this.btnFileAssociation.Size = new System.Drawing.Size(222, 23);
             this.btnFileAssociation.TabIndex = 60;
@@ -249,14 +252,14 @@
             this.txtApplicationUrl.Size = new System.Drawing.Size(205, 20);
             this.txtApplicationUrl.TabIndex = 50;
             // 
-            // label4
+            // lblApplicationUrl
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 93);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(78, 13);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "Application Url:";
+            this.lblApplicationUrl.AutoSize = true;
+            this.lblApplicationUrl.Location = new System.Drawing.Point(13, 93);
+            this.lblApplicationUrl.Name = "lblApplicationUrl";
+            this.lblApplicationUrl.Size = new System.Drawing.Size(78, 13);
+            this.lblApplicationUrl.TabIndex = 14;
+            this.lblApplicationUrl.Text = "Application Url:";
             // 
             // cbShowDecryptedLinks
             // 
@@ -270,8 +273,9 @@
             // 
             // lblVersion
             // 
+            this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(13, 211);
+            this.lblVersion.Location = new System.Drawing.Point(13, 239);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(59, 13);
             this.lblVersion.TabIndex = 92;
@@ -279,14 +283,25 @@
             this.lblVersion.Text = "Version {0}";
             this.lblVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVersion_LinkClicked);
             // 
+            // cbIgnoreHoster
+            // 
+            this.cbIgnoreHoster.AutoSize = true;
+            this.cbIgnoreHoster.Location = new System.Drawing.Point(101, 162);
+            this.cbIgnoreHoster.Name = "cbIgnoreHoster";
+            this.cbIgnoreHoster.Size = new System.Drawing.Size(145, 17);
+            this.cbIgnoreHoster.TabIndex = 93;
+            this.cbIgnoreHoster.Text = "Ignore unchecked hoster";
+            this.cbIgnoreHoster.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 237);
+            this.ClientSize = new System.Drawing.Size(335, 265);
+            this.Controls.Add(this.cbIgnoreHoster);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.cbShowDecryptedLinks);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lblApplicationUrl);
             this.Controls.Add(this.txtApplicationUrl);
             this.Controls.Add(this.cbApplicationEnabled);
             this.Controls.Add(this.btnFileAssociation);
@@ -337,11 +352,12 @@
         private System.Windows.Forms.ToolStripMenuItem addContainerToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbApplicationEnabled;
         private System.Windows.Forms.TextBox txtApplicationUrl;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblApplicationUrl;
         private System.Windows.Forms.CheckBox cbShowDecryptedLinks;
         private System.Windows.Forms.LinkLabel lblVersion;
         private System.Windows.Forms.ToolStripMenuItem bookmarksToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbIgnoreHoster;
     }
 }

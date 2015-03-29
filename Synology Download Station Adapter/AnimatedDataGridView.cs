@@ -134,7 +134,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     _cells.CopyTo(rcs);
                     foreach (RowCol rc in rcs)
                     {
-                        if (!DataGridView.IsDisposed)
+                        if (DataGridView.RowCount > rc.Row &&
+                            !DataGridView.IsDisposed)
                         {
                             DataGridView.InvalidateCell(rc.Column, rc.Row);
                         }

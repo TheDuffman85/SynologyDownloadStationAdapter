@@ -1,4 +1,5 @@
-﻿using Awesomium.Core;
+﻿#if !__MonoCS__
+using Awesomium.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -170,3 +171,4 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 
      }  
 }
+#endif

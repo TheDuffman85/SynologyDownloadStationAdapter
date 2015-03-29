@@ -4,7 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+#if !__MonoCS__
 using Awesomium.Core;
+#endif
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
@@ -19,6 +21,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         [STAThread]
         static void Main(string[] args)
         {            
+            #if !__MonoCS__
             if (args.Length == 1)
             {
                 switch (args[0])
@@ -33,6 +36,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         break;
                 }
             }
+            #endif
 
             bool createdNew = true;
             using (Mutex mutex = new Mutex(true, "SynologyDownloadStationAdapter", out createdNew))
@@ -74,13 +78,17 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             }            
         }
 
+        
         private static void OnApplicationExit(object sender, EventArgs e)
         {
+            #if !__MonoCS__
             if (WebCore.IsInitialized)
             {
                 WebCore.Shutdown();
             }
+            #endif
         }
+        
            
         #endregion
     }

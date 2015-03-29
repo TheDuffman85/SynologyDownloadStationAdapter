@@ -131,6 +131,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             DataRow oldRow = ((DataRowView)bsBookmark.Current).Row;
             DataRow newRow = dtBookmarks.NewRow();
 
+
             newRow.ItemArray = oldRow.ItemArray;
             
             if (currentPosition > 0)

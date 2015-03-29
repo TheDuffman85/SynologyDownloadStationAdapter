@@ -16,12 +16,16 @@ using TheDuffman85.ContainerDecrypter;
 
 namespace TheDuffman85.SynologyDownloadStationAdapter
 {
-    public class Adapter
+    public static class Adapter
     {
         #region Imports
+        
+        #if !__MonoCS__
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+
+        #endif
 
         #endregion
 
@@ -97,8 +101,10 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 // Listen on port 9666 not allowed
                 if (ex.ErrorCode == 5)
                 {
+                    #if !__MonoCS__
                     // Allow listen
                     Adapter.AllowListener();
+                    #endif
 
                     // Restart
                     Process.Start(Application.ExecutablePath);
@@ -194,7 +200,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                     {
                         if (Adapter.FILE_TYPES_NO_DECRYPT.Contains(Path.GetExtension(filePath).ToLower()))
                         {
-                            Adapter.AddFileToDownloadStation(filePath);
+                            new Task(() => { Adapter.AddFileToDownloadStation(filePath); }).Start();   
                         }
                         else
                         {
@@ -306,6 +312,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             WindowsPrincipal principal = new WindowsPrincipal(id);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
+
+        #if !__MonoCS__
 
         /// <summary>
         /// Runs a new instance of the current application with administrative rights
@@ -442,7 +450,9 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         public static void AllowListener()
         {            
             RunAsAdmin("netsh", "http add urlacl url=http://+:9666/ user=" + WindowsIdentity.GetCurrent().Name);
-        }               
+        }         
+      
+        #endif
                       
         /// <summary>
         /// Add links of a decrypted container to Download Station
@@ -727,12 +737,15 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
         public static void OpenDownloadStation()
         {
+            #if !__MonoCS__
             if (Properties.Settings.Default.ApplicationEnabled)
             {
                 frmDownloadStation.ShowInstance();
             }
             else
+            #endif
             {
+            
                 Process.Start("http://" + Properties.Settings.Default.Address);
             }
         }

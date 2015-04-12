@@ -51,7 +51,7 @@
             this.cbAutostart = new System.Windows.Forms.CheckBox();
             this.btnFileAssociation = new System.Windows.Forms.Button();
             this.cbApplicationEnabled = new System.Windows.Forms.CheckBox();
-            this.txtApplicationUrl = new System.Windows.Forms.TextBox();
+            this.txtApplicationPath = new System.Windows.Forms.TextBox();
             this.lblApplicationUrl = new System.Windows.Forms.Label();
             this.cbShowDecryptedLinks = new System.Windows.Forms.CheckBox();
             this.lblVersion = new System.Windows.Forms.LinkLabel();
@@ -171,6 +171,7 @@
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(222, 20);
             this.txtAddress.TabIndex = 10;
+            this.txtAddress.Validating += new System.ComponentModel.CancelEventHandler(this.txtAddress_Validating);
             // 
             // txtUsername
             // 
@@ -242,24 +243,25 @@
             this.cbApplicationEnabled.Size = new System.Drawing.Size(15, 14);
             this.cbApplicationEnabled.TabIndex = 40;
             this.cbApplicationEnabled.UseVisualStyleBackColor = true;
-            this.cbApplicationEnabled.CheckedChanged += new System.EventHandler(this.cbApplicationUrl_CheckedChanged);
+            this.cbApplicationEnabled.CheckedChanged += new System.EventHandler(this.cbApplicationPath_CheckedChanged);
             // 
-            // txtApplicationUrl
+            // txtApplicationPath
             // 
-            this.txtApplicationUrl.Enabled = false;
-            this.txtApplicationUrl.Location = new System.Drawing.Point(118, 90);
-            this.txtApplicationUrl.Name = "txtApplicationUrl";
-            this.txtApplicationUrl.Size = new System.Drawing.Size(205, 20);
-            this.txtApplicationUrl.TabIndex = 50;
+            this.txtApplicationPath.Enabled = false;
+            this.txtApplicationPath.Location = new System.Drawing.Point(118, 90);
+            this.txtApplicationPath.Name = "txtApplicationPath";
+            this.txtApplicationPath.Size = new System.Drawing.Size(205, 20);
+            this.txtApplicationPath.TabIndex = 50;
+            this.txtApplicationPath.Validating += new System.ComponentModel.CancelEventHandler(this.txtApplicationPath_Validating);
             // 
             // lblApplicationUrl
             // 
             this.lblApplicationUrl.AutoSize = true;
             this.lblApplicationUrl.Location = new System.Drawing.Point(13, 93);
             this.lblApplicationUrl.Name = "lblApplicationUrl";
-            this.lblApplicationUrl.Size = new System.Drawing.Size(78, 13);
+            this.lblApplicationUrl.Size = new System.Drawing.Size(86, 13);
             this.lblApplicationUrl.TabIndex = 14;
-            this.lblApplicationUrl.Text = "Application Url:";
+            this.lblApplicationUrl.Text = "Application path:";
             // 
             // cbShowDecryptedLinks
             // 
@@ -302,7 +304,7 @@
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.cbShowDecryptedLinks);
             this.Controls.Add(this.lblApplicationUrl);
-            this.Controls.Add(this.txtApplicationUrl);
+            this.Controls.Add(this.txtApplicationPath);
             this.Controls.Add(this.cbApplicationEnabled);
             this.Controls.Add(this.btnFileAssociation);
             this.Controls.Add(this.cbAutostart);
@@ -351,7 +353,7 @@
         private System.Windows.Forms.ToolStripMenuItem addLinkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addContainerToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbApplicationEnabled;
-        private System.Windows.Forms.TextBox txtApplicationUrl;
+        private System.Windows.Forms.TextBox txtApplicationPath;
         private System.Windows.Forms.Label lblApplicationUrl;
         private System.Windows.Forms.CheckBox cbShowDecryptedLinks;
         private System.Windows.Forms.LinkLabel lblVersion;

@@ -107,7 +107,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             cbAutostart.Visible = false;
             lblApplicationUrl.Visible = false;
             cbApplicationEnabled.Visible = false;
-            txtApplicationUrl.Visible = false;
+            txtApplicationPath.Visible = false;
                         
             cbShowDecryptedLinks.Top = cbShowDecryptedLinks.Top - 23;
             cbIgnoreHoster.Top = cbIgnoreHoster.Top - 46;
@@ -116,7 +116,31 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             lblVersion.Text = lblVersion.Text + " (Mono)";
             #endif
 
-            
+            #region Upgrade Settings
+
+            bool upgraded = false;
+            Uri address;
+
+            if (!Uri.TryCreate(Properties.Settings.Default.Address, UriKind.Absolute, out address) ||
+                (address != null && address.Scheme != Uri.UriSchemeHttp && address.Scheme != Uri.UriSchemeHttps))
+            {
+                Properties.Settings.Default.Address = "http://" + Properties.Settings.Default.Address;
+                upgraded = true;
+            }            
+
+            if (Properties.Settings.Default.ApplicationEnabled &&
+                string.IsNullOrEmpty(Properties.Settings.Default.ApplicationPath))
+            {
+                Properties.Settings.Default.ApplicationPath = "/download/index.cgi";
+                upgraded = true;
+            }
+
+            if (upgraded)
+            {
+                Properties.Settings.Default.Save();
+            }
+
+            #endregion
 
             InitBookmarks();
         }
@@ -227,7 +251,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             Properties.Settings.Default.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(txtPassword.Text));
             #if !__MonoCS__
             Properties.Settings.Default.ApplicationEnabled = cbApplicationEnabled.Checked;
-            Properties.Settings.Default.ApplicationUrl = txtApplicationUrl.Text;
+            Properties.Settings.Default.ApplicationPath = txtApplicationPath.Text;
             #endif
             Properties.Settings.Default.ShowDecryptedLinks = cbShowDecryptedLinks.Checked;
             Properties.Settings.Default.IgnoreHoster = cbIgnoreHoster.Checked;
@@ -258,7 +282,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 txtPassword.Text = Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password));
                 #if !__MonoCS__
                 cbApplicationEnabled.Checked = Properties.Settings.Default.ApplicationEnabled;
-                txtApplicationUrl.Text = Properties.Settings.Default.ApplicationUrl;
+                txtApplicationPath.Text = Properties.Settings.Default.ApplicationPath;
                 #endif
                 cbShowDecryptedLinks.Checked = Properties.Settings.Default.ShowDecryptedLinks;
                 cbIgnoreHoster.Checked = Properties.Settings.Default.IgnoreHoster;
@@ -278,24 +302,72 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         }    
         
         
-        private void cbApplicationUrl_CheckedChanged(object sender, EventArgs e)
+        private void cbApplicationPath_CheckedChanged(object sender, EventArgs e)
         {
             #if !__MonoCS__
             if (!cbApplicationEnabled.Checked)
             {
-                txtApplicationUrl.Enabled = false;
-                txtApplicationUrl.Text = string.Empty;
+                txtApplicationPath.Enabled = false;
+                txtApplicationPath.Text = string.Empty;
             }
             else
             {
-                txtApplicationUrl.Enabled = true;                
-                if (string.IsNullOrEmpty(txtApplicationUrl.Text))
+                txtApplicationPath.Enabled = true;                
+                if (string.IsNullOrEmpty(txtApplicationPath.Text))
                 {
-                    txtApplicationUrl.Text = "http://" + txtAddress.Text + "/download/index.cgi";
+                    txtApplicationPath.Text = "/download/index.cgi";
                 }
             }
             #endif
-        }        
+        }
+
+        private void txtAddress_Validating(object sender, CancelEventArgs e)
+        {
+            Uri address;
+            DialogResult result = System.Windows.Forms.DialogResult.None;
+
+            if (!Uri.TryCreate(txtAddress.Text, UriKind.Absolute, out address))
+            {
+                result = MessageBox.Show("Please enter a valid uri. eg.: http://diskstation:5000", "Settings", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                if (address.Scheme != Uri.UriSchemeHttp &&
+                    address.Scheme != Uri.UriSchemeHttps)
+                {
+                    result = MessageBox.Show("The protocol has to be http or https.", "Settings", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                }
+            }
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                e.Cancel = true;
+            }
+            else if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                txtAddress.Text = Properties.Settings.Default.Address;
+            }
+        }
+
+        private void txtApplicationPath_Validating(object sender, CancelEventArgs e)
+        {
+            Uri path;
+            DialogResult result = System.Windows.Forms.DialogResult.None;
+
+            if (!Uri.TryCreate(txtApplicationPath.Text, UriKind.Relative, out path))
+            {
+                result = MessageBox.Show("Please enter a relative uri. eg.: /download/index.cgi", "Settings", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            }
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                e.Cancel = true;
+            }
+            else if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                txtApplicationPath.Text = Properties.Settings.Default.ApplicationPath;
+            }
+        }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -417,8 +489,8 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         }
 
         #endregion
-        
-        #endregion 
+                        
+        #endregion         
 
     }
 }

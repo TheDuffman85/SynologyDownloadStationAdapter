@@ -486,10 +486,15 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         public static bool AddLinksToDownloadStation(List<string> links)
         {
             DownloadStation ds = null;
-                        
+                                    
             try
             {
-                ds = new DownloadStation(new Uri("http://" + Properties.Settings.Default.Address), Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
+                UriBuilder uriBuilder = new UriBuilder(Properties.Settings.Default.Address)
+                {
+                    Scheme = Uri.UriSchemeHttp
+                };
+                                
+                ds = new DownloadStation(uriBuilder.Uri, Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
 
                 // Login to Download Station
                 if (ds.Login())
@@ -622,7 +627,12 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
 
             try
             {
-                ds = new DownloadStation(new Uri("http://" + Properties.Settings.Default.Address), Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
+                UriBuilder uriBuilder = new UriBuilder(Properties.Settings.Default.Address)
+                {
+                    Scheme = Uri.UriSchemeHttp
+                };
+
+                ds = new DownloadStation(uriBuilder.Uri, Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
 
                 if (File.Exists(path))
                 {
@@ -745,8 +755,16 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
             else
             #endif
             {
-            
-                Process.Start("http://" + Properties.Settings.Default.Address);
+                UriBuilder uriBuilder = new UriBuilder(Properties.Settings.Default.Address);
+
+                // ToDo
+
+                if (string.IsNullOrEmpty(uriBuilder.Scheme))
+                {
+                    uriBuilder.Scheme = Uri.UriSchemeHttp;
+                }
+
+                Process.Start(uriBuilder.Uri.ToString());
             }
         }
 

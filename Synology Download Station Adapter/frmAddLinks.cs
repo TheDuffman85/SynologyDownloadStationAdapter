@@ -112,15 +112,13 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         {            
             this.Visible = false;
             Clipboard.Clear();
-
-            frmSettings.Instance.Invoke((MethodInvoker)(() =>
+            
+            new Task(() => 
             {
-                // Run on UI thread
-                new Task(() => { Adapter.AddLinksToDownloadStation(txtLinks.Lines.ToList()); }).Start();
-            }
-            ));            
-              
-            this.Close();
+                Adapter.AddLinksToDownloadStation(txtLinks.Lines.ToList());
+                this.Invoke((MethodInvoker)(() => { this.Close(); }));
+                
+            }).Start();      
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

@@ -111,7 +111,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
         private void frmDownloadStation_Load(object sender, EventArgs e)
         {                        
             webControl.DocumentReady += webControl_DocumentReady;
-            webControl.Source = new Uri(Properties.Settings.Default.ApplicationUrl);
+            webControl.Source = new Uri(new Uri(Properties.Settings.Default.Address), Properties.Settings.Default.ApplicationPath);
         }
 
         private void frmDownloadStation_ResizeEnd(object sender, EventArgs e)

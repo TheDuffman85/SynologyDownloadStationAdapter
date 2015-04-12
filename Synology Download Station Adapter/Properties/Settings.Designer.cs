@@ -25,7 +25,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("diskstation:5000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://diskstation:5000")]
         public string Address {
             get {
                 return ((string)(this["Address"]));
@@ -95,12 +95,12 @@ namespace TheDuffman85.SynologyDownloadStationAdapter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ApplicationUrl {
+        public string ApplicationPath {
             get {
-                return ((string)(this["ApplicationUrl"]));
+                return ((string)(this["ApplicationPath"]));
             }
             set {
-                this["ApplicationUrl"] = value;
+                this["ApplicationPath"] = value;
             }
         }
         

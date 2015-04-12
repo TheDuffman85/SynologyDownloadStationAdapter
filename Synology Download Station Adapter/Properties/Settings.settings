@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Address" Type="System.String" Scope="User">
-      <Value Profile="(Default)">diskstation:5000</Value>
+      <Value Profile="(Default)">http://diskstation:5000</Value>
     </Setting>
     <Setting Name="Username" Type="System.String" Scope="User">
       <Value Profile="(Default)">admin</Value>
@@ -20,7 +20,7 @@
     <Setting Name="ApplicationEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ApplicationUrl" Type="System.String" Scope="User">
+    <Setting Name="ApplicationPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SizeX" Type="System.Int32" Scope="User">

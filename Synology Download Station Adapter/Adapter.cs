@@ -495,60 +495,61 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 };
                                 
                 ds = new DownloadStation(uriBuilder.Uri, Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
+                         
+                links.RemoveAll(str => String.IsNullOrEmpty(str.Trim()));
 
-                // Login to Download Station
-                if (ds.Login())
+                Dictionary<string, List<string>> validHostLinks = new Dictionary<string, List<string>>();
+                List<string> corruptedLinks = new List<string>();   
+                Uri currentLink = null;
+                int validHostLinkCount = 0;
+                int totalLinkCount = 0;
+                string balloonMsg;
+
+                foreach (string link in links)
                 {
-                    links.RemoveAll(str => String.IsNullOrEmpty(str.Trim()));
-
-                    Dictionary<string, List<string>> validHostLinks = new Dictionary<string, List<string>>();
-                    List<string> corruptedLinks = new List<string>();   
-                    Uri currentLink = null;
-                    int validHostLinkCount = 0;
-                    int totalLinkCount = 0;
-                    string balloonMsg;
-
-                    foreach (string link in links)
+                    try
                     {
-                        try
-                        {
-                            currentLink = new Uri(link);
+                        currentLink = new Uri(link);
                            
-                            if (!validHostLinks.ContainsKey(currentLink.Host))
-                            {
-                                validHostLinks.Add(currentLink.Host, new List<string>());
-                            }
+                        if (!validHostLinks.ContainsKey(currentLink.Host))
+                        {
+                            validHostLinks.Add(currentLink.Host, new List<string>());
+                        }
                             
-                            validHostLinks[currentLink.Host].Add(link);
-                        }
-                        catch
-                        {
-                            corruptedLinks.Add(link);
-                        }                        
+                        validHostLinks[currentLink.Host].Add(link);
                     }
-
-                    if (validHostLinks.Keys.Count > 1)
-                    {                        
-                        frmSettings.Instance.Invoke((MethodInvoker)(() =>
-                        {
-                            // Run on UI thread
-                            frmSelectHoster.Instance.SelectHoster(validHostLinks);
-                        }
-                        ));
-                    }
-
-                    // Get total link count
-                    foreach (var validHostLink in validHostLinks)
+                    catch
                     {
-                        totalLinkCount += validHostLink.Value.Count;
-                    }
+                        corruptedLinks.Add(link);
+                    }                        
+                }
 
-                    
-                    if (validHostLinks.Count > 0)
+                if (validHostLinks.Keys.Count > 1)
+                {                        
+                    frmSettings.Instance.Invoke((MethodInvoker)(() =>
                     {
-                        balloonMsg = "Adding " + totalLinkCount + " links(s) (" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
+                        // Run on UI thread
+                        frmSelectHoster.Instance.SelectHoster(validHostLinks);
+                    }
+                    ));
+                }
 
-                        Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info, 30000);
+                // Get total link count
+                foreach (var validHostLink in validHostLinks)
+                {
+                    totalLinkCount += validHostLink.Value.Count;
+                }
+
+
+                if (validHostLinks.Count > 0)
+                {
+                    balloonMsg = "Adding " + totalLinkCount + " links(s) (" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
+
+                    Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info, 30000);
+
+                    // Login to Download Station
+                    if (ds.Login())
+                    {
 
                         foreach (var validHostLink in validHostLinks)
                         {
@@ -576,20 +577,24 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                         }
 
                         balloonMsg = totalLinkCount + " link(s) added (" + (validHostLinks.Count > 1 ? validHostLinks.Count + " Hosts)" : validHostLinks.First().Key + ")");
-                                                
+
                         if (corruptedLinks.Count > 0)
                         {
                             balloonMsg += "\r\n" + corruptedLinks.Count + " links(s) were corrupted";
                         }
 
-                        Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info);                        
-                    }
+                        Adapter.ShowBalloonTip(balloonMsg, ToolTipIcon.Info);
+                        return true;
 
-                    return true;
+                    }
+                    else
+                    {
+                        throw new Exception("Couldn't login to Download Station");
+                    }
                 }
                 else
                 {
-                    throw new Exception("Couldn't login to Download Station");
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -638,37 +643,38 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                 {
                     name = Path.GetFileName(path);
 
-                    // Login to Download Station
-                    if (ds.Login())
-                    {
+                    
                         Adapter.ShowBalloonTip("Adding " + name , ToolTipIcon.Info, 30000);
 
                         // Register file for download
                         string fileDownload = RegisterFileDownload(path);
 
-                        // Add file to Download Station
-                        SynologyRestDAL.TResult<object> result = ds.CreateTask(fileDownload);
-
-                        if (!result.Success)
+                        // Login to Download Station
+                        if (ds.Login())
                         {
-                            if (result.Error.Code == 406)
+                            // Add file to Download Station
+                            SynologyRestDAL.TResult<object> result = ds.CreateTask(fileDownload);
+
+                            if (!result.Success)
                             {
-                                throw new Exception("Couldn't add link(s). You have to choose a download folder for your Download Station.");
+                                if (result.Error.Code == 406)
+                                {
+                                    throw new Exception("Couldn't add link(s). You have to choose a download folder for your Download Station.");
+                                }
+                                else
+                                {
+                                    throw new Exception("While adding " + name + " error code " + result.Error.Code + " occurred");
+                                }
                             }
-                            else
-                            {
-                                throw new Exception("While adding " + name + " error code " + result.Error.Code + " occurred");
-                            }
+
+                            Adapter.ShowBalloonTip("Added " + name, ToolTipIcon.Info);
+
+                            return true;
                         }
-
-                        Adapter.ShowBalloonTip("Added " + name , ToolTipIcon.Info);
-
-                        return true;
-                    }
-                    else
-                    {
-                        throw new Exception("Couldn't login to Download Station");
-                    }
+                        else
+                        {
+                            throw new Exception("Couldn't login to Download Station");
+                        }                    
                 }
                 else
                 {

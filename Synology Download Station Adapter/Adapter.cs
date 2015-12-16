@@ -489,10 +489,7 @@ namespace TheDuffman85.SynologyDownloadStationAdapter
                                     
             try
             {
-                UriBuilder uriBuilder = new UriBuilder(Properties.Settings.Default.Address)
-                {
-                    Scheme = Uri.UriSchemeHttp
-                };
+                UriBuilder uriBuilder = new UriBuilder(Properties.Settings.Default.Address);
                                 
                 ds = new DownloadStation(uriBuilder.Uri, Properties.Settings.Default.Username, Encoding.UTF8.GetString(Convert.FromBase64String(Properties.Settings.Default.Password)));
                          

@@ -9,11 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TheDuffman85.SynologyDownloadStationAdapter</RootNamespace>
     <AssemblyName>Synology Download Station Adapter</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
     <PublishUrl>E:\Visual Studio 2013\Projects\Synology Download Station Adapter\Synology Download Station Adapter\release\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -70,7 +72,7 @@
     <ManifestKeyFile>Synology Download Station Adapter_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -80,17 +82,36 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mono Release|AnyCPU'">
     <OutputPath>bin\Mono Release\</OutputPath>
     <DefineConstants> __MonoCS__</DefineConstants>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TheDuffman85.SynologyDownloadStationAdapter.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214" />
-    <Reference Include="Awesomium.Windows.Forms, Version=1.7.5.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
+      <HintPath>..\packages\Awesomium.Windows.Forms.Unofficial.1.7.5.0\lib\Awesomium.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Awesomium.Windows.Forms, Version=1.7.5.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86">
+      <HintPath>..\packages\Awesomium.Windows.Forms.Unofficial.1.7.5.0\lib\Awesomium.Windows.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="RestSharp, Version=104.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.104.5.0\lib\net4\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StdUtils">
       <HintPath>.\StdUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="Synology, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Synology.NET.1.0.2\lib\net40\Synology.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SynologyAPI">
       <HintPath>.\SynologyAPI.dll</HintPath>
@@ -172,6 +193,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Icons\Farm Fresh Iconset %283000 icons%29 Fatcow Web Hosting.URL" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -246,6 +268,13 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
